@@ -4,14 +4,20 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import type { EmotionScale } from '@/lib/api';
+import feelingQuiet from '@/assets/icons/Answers/feeling_quiet.png';
+import feelingConfusion from '@/assets/icons/Answers/feeling_confusion.png';
+import feelingPessimism from '@/assets/icons/Answers/feeling_pessimism.png';
+import feelingFear from '@/assets/icons/Answers/feeling_fear.png';
+import feelingAngry from '@/assets/icons/Answers/feeling_angry.png';
+import howDoYouFeelIcon from '@/assets/icons/questions/How_u_feel.png';
 import './EmotionScale.css';
 
 const emotionLevels = [
-  { level: 1, color: 'green', label: 'Very Good', emoji: '😊', feeling: 'very_good' },
-  { level: 2, color: 'yellow', label: 'Good', emoji: '🙂', feeling: 'good' },
-  { level: 3, color: 'orange', label: 'Neutral', emoji: '😐', feeling: 'neutral' },
-  { level: 4, color: 'red', label: 'Bad', emoji: '😟', feeling: 'bad' },
-  { level: 5, color: 'dark-red', label: 'Very Bad', emoji: '😢', feeling: 'very_bad' },
+  { level: 1, color: 'green', label: 'Quiet', icon: feelingQuiet, feeling: 'quiet' },
+  { level: 2, color: 'yellow', label: 'Confusion', icon: feelingConfusion, feeling: 'confusion' },
+  { level: 3, color: 'orange', label: 'Pessimism', icon: feelingPessimism, feeling: 'pessimism' },
+  { level: 4, color: 'red', label: 'Fear', icon: feelingFear, feeling: 'fear' },
+  { level: 5, color: 'dark-red', label: 'Angry', icon: feelingAngry, feeling: 'angry' },
 ];
 
 const colorClasses: Record<string, string> = {
@@ -43,7 +49,10 @@ export function EmotionScaleComponent({ onSelect, selectedEmotion }: EmotionScal
 
   return (
     <div className="emotion-scale">
-      <h3 className="text-lg font-semibold mb-4">How do you feel?</h3>
+      <div className="question-header">
+        <img src={howDoYouFeelIcon} alt="How do you feel" className="question-icon" />
+        <h3 className="text-lg font-semibold mb-4">How do you feel?</h3>
+      </div>
       <div className="emotion-buttons">
         {emotionLevels.map((emotion) => (
           <button
@@ -56,7 +65,9 @@ export function EmotionScaleComponent({ onSelect, selectedEmotion }: EmotionScal
             )}
             title={emotion.label}
           >
-            <span className="emotion-emoji">{emotion.emoji}</span>
+            <div className="emotion-icon">
+              <img src={emotion.icon} alt={emotion.label} />
+            </div>
             <span className="emotion-label">{emotion.label}</span>
           </button>
         ))}

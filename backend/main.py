@@ -95,6 +95,7 @@ reports_db: List[Report] = []
 
 # Données de référence pour les symboles
 SYMBOLS_DATA = [
+    {"id": "everything_fine", "label": "Everything is fine", "category": "general"},
     {"id": "push", "label": "Pousser", "category": "physical"},
     {"id": "hit", "label": "Frapper", "category": "physical"},
     {"id": "kick", "label": "Donner un coup de pied", "category": "physical"},

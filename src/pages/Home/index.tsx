@@ -4,6 +4,9 @@
 import { Link } from 'react-router-dom';
 import { ThemeSelector } from '@/components/ThemeSelector';
 import { LogIn } from 'lucide-react';
+import myselfIcon from '@/assets/icons/homepage/homepage_button_myself.png';
+import othersIcon from '@/assets/icons/homepage/homepage_button_others.png';
+import trainIcon from '@/assets/icons/homepage/homepage_button_train.png';
 import './Home.css';
 
 export function Home() {
@@ -27,19 +30,25 @@ export function Home() {
 
         <div className="main-options">
           <Link to="/student" className="main-option-card">
-            <div className="option-icon">🆘</div>
+            <div className="option-icon">
+              <img src={myselfIcon} alt="Get help for myself" />
+            </div>
             <h2 className="option-title">Get help for myself</h2>
             <div className="option-arrow">→</div>
           </Link>
 
           <Link to="/help-others" className="main-option-card">
-            <div className="option-icon">🤝</div>
+            <div className="option-icon">
+              <img src={othersIcon} alt="Help someone in need" />
+            </div>
             <h2 className="option-title">Help someone in need</h2>
             <div className="option-arrow">→</div>
           </Link>
 
           <Link to="/find-out" className="main-option-card">
-            <div className="option-icon">📚</div>
+            <div className="option-icon">
+              <img src={trainIcon} alt="Find out" />
+            </div>
             <h2 className="option-title">Find out</h2>
             <div className="option-arrow">→</div>
           </Link>

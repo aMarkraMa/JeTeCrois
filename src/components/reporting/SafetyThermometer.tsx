@@ -35,51 +35,38 @@ export function SafetyThermometerComponent({ onSelect, selectedSafety }: SafetyT
 
   return (
     <div className="safety-thermometer">
-      <h3 className="text-lg font-semibold mb-4">Do you feel safe at school?</h3>
+      <div className="question-header">
+        <div className="question-icon-placeholder">🛡️</div>
+        <h3 className="text-lg font-semibold mb-6 text-center">Do you feel safe at school?</h3>
+      </div>
       
-      <div className="thermometer-container">
-        <div className="thermometer-bar">
-          {safetyLevels.map((safety, index) => {
-            const isSelected = selected >= safety.level;
-            const isActive = selected === safety.level;
-            
-            return (
-              <div
-                key={safety.level}
-                className={cn(
-                  'thermometer-segment',
-                  isSelected && 'filled',
-                  isActive && 'active'
-                )}
-                style={{
-                  backgroundColor: isSelected ? safety.color : '#e5e7eb',
-                }}
-                onClick={() => handleSelect(safety.level, safety.feeling)}
-              >
-                <div className="segment-label">{safety.level}</div>
-              </div>
-            );
-          })}
-        </div>
-        
-        <div className="thermometer-labels">
-          {safetyLevels.map((safety) => (
+      <div className="thermometer-container-horizontal">
+        {safetyLevels.map((safety) => {
+          const isActive = selected === safety.level;
+          
+          return (
             <button
               key={safety.level}
               onClick={() => handleSelect(safety.level, safety.feeling)}
               className={cn(
-                'thermometer-label-btn',
-                selected === safety.level && 'active'
+                'thermometer-item-horizontal',
+                isActive && 'active'
               )}
+              style={{
+                borderColor: isActive ? safety.color : '#e5e7eb',
+                backgroundColor: isActive ? safety.color : 'white',
+                color: isActive ? 'white' : '#1f2937',
+              }}
             >
-              {safety.label}
+              <div className="thermometer-number">{safety.level}</div>
+              <div className="thermometer-label-horizontal">{safety.label}</div>
             </button>
-          ))}
-        </div>
+          );
+        })}
       </div>
 
       {selected > 0 && (
-        <p className="mt-4 text-center text-sm text-muted-foreground">
+        <p className="mt-6 text-center text-sm text-muted-foreground">
           Safety level: {safetyLevels[selected - 1].label}
         </p>
       )}

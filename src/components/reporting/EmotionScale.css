@@ -2,30 +2,70 @@
   width: 100%;
 }
 
-.emotion-buttons {
+.question-header {
   display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.question-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+  transition: transform 0.3s ease;
+}
+
+.question-header:hover .question-icon {
+  transform: scale(1.05);
+}
+
+.emotion-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+@media (min-width: 640px) {
+  .emotion-buttons {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .emotion-buttons {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+  }
 }
 
 .emotion-button {
-  flex: 1;
-  min-width: 80px;
-  padding: 20px 12px;
-  border-radius: 16px;
+  padding: 24px 16px;
+  border-radius: 24px;
   color: white;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  border: none;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 4px 0 0 rgba(0, 0, 0, 0.2),
+    0 8px 16px rgba(0, 0, 0, 0.15);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive, sans-serif;
+  min-height: 120px;
+  width: 100%;
 }
 
 .emotion-button::before {
@@ -47,19 +87,33 @@
 }
 
 .emotion-button:hover {
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transform: translateY(-6px) rotate(-2deg) scale(1.1);
+  box-shadow: 
+    0 6px 0 0 rgba(0, 0, 0, 0.2),
+    0 12px 24px rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
-.emotion-emoji {
-  font-size: 40px;
-  transition: transform 0.3s ease;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+.emotion-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   z-index: 1;
+  transition: transform 0.3s ease;
 }
 
-.emotion-button:hover .emotion-emoji {
+.emotion-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s ease;
+}
+
+.emotion-button:hover .emotion-icon img {
   transform: scale(1.2) rotate(5deg);
 }
 
@@ -69,13 +123,19 @@
 }
 
 @media (max-width: 640px) {
-  .emotion-button {
-    min-width: 60px;
-    padding: 12px 6px;
+  .emotion-buttons {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
   
-  .emotion-emoji {
-    font-size: 24px;
+  .emotion-button {
+    min-width: 0;
+    padding: 20px 12px;
+  }
+  
+  .emotion-icon {
+    width: 32px;
+    height: 32px;
   }
   
   .emotion-label {
