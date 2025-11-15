@@ -109,14 +109,12 @@
   font-size: 52px;
   font-weight: 900;
   margin-bottom: 16px;
-  color: #FF6BA8;
+  color: #fa3285;
   text-shadow: 
-    3px 3px 0 #FFB6D9,
+    1px 3px 0 #FFB6D9,
     6px 6px 0 rgba(255, 182, 217, 0.5),
     0 2px 8px rgba(255, 107, 168, 0.3);
   letter-spacing: -1px;
-  animation: titleBounce 2s ease-in-out infinite;
-  transition: all 0.3s ease;
   font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive, sans-serif;
   position: relative;
   display: inline-block;
@@ -308,3 +306,72 @@
   }
 }
 
+/* === LOADING OVERLAY (full screen, matches background) === */
+
+.home-loading-overlay {
+  position: fixed;
+  inset: 0;               /* top:0, right:0, bottom:0, left:0 */
+  z-index: 2000;          /* above everything on the page */
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Use EXACT same gradient + animation as home-page */
+  background: var(
+    --home-bg-gradient,
+    linear-gradient(135deg, #FFE5F1 0%, #E8F4F8 30%, #FFF4E6 60%, #F0E8FF 100%)
+  );
+  background-size: 200% 200%;
+  animation: gradientShift 20s ease infinite;
+}
+
+/* Make sure rotating glow stays behind the loader */
+.home-page::before {
+  z-index: 0;
+}
+
+.home-loading-overlay::before {
+  /* optional soft overlay to match vibe and hide any shapes behind */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.35) 0, transparent 60%);
+  pointer-events: none;
+}
+
+/* Centered content (GIF + text) */
+.loading-content {
+  position: relative;
+  z-index: 1; /* above the overlay background */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+/* GIF responsiveness */
+.loading-gif {
+  width: 140px;
+  max-width: 60vw;
+  height: auto;
+}
+
+/* Loading text styling */
+.loading-text {
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  color: #ffffff;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive, sans-serif;
+}
+
+/* Bigger on laptops / large screens */
+@media (min-width: 768px) {
+  .loading-gif {
+    width: 180px;
+  }
+
+}

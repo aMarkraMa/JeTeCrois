@@ -236,7 +236,7 @@ export function StudentDashboard() {
   return (
     <div className="student-dashboard">
       <Link to="/" className="dashboard-title-link">
-        <h1 className="dashboard-title">Are You Safe</h1>
+        <h1 className="dashboard-title">Je te crois</h1>
       </Link>
 
       {isEverythingFine === false && (
