@@ -263,16 +263,6 @@ export function StudentDashboard() {
             </div>
             <div className="everything-fine-options">
               <button
-                onClick={() => handleEverythingFine(true)}
-                className={`everything-fine-btn ${isEverythingFine === true ? 'selected' : ''}`}
-              >
-                <div className="fine-icon">✅</div>
-                <div className="fine-content">
-                  <h4 className="fine-title">Everything is fine</h4>
-                  <p className="fine-description">No incidents to report</p>
-                </div>
-              </button>
-              <button
                 onClick={() => handleEverythingFine(false)}
                 className={`everything-fine-btn ${isEverythingFine === false ? 'selected' : ''}`}
               >
@@ -280,6 +270,16 @@ export function StudentDashboard() {
                 <div className="fine-content">
                   <h4 className="fine-title">I need to report something</h4>
                   <p className="fine-description">Something happened that I want to report</p>
+                </div>
+              </button>
+              <button
+                onClick={() => handleEverythingFine(true)}
+                className={`everything-fine-btn everything-fine-subtle ${isEverythingFine === true ? 'selected' : ''}`}
+              >
+                <div className="fine-icon">✅</div>
+                <div className="fine-content">
+                  <h4 className="fine-title">Everything is fine</h4>
+                  <p className="fine-description">No incidents to report</p>
                 </div>
               </button>
             </div>
