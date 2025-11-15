@@ -237,6 +237,7 @@ export function StudentDashboard() {
 
   return (
     <div className="student-dashboard">
+<<<<<<< HEAD
       <div className="dashboard-header-top">
         <Link to="/" className="dashboard-title-link">
           <h1 className="dashboard-title">Are You Safe</h1>
@@ -256,6 +257,11 @@ export function StudentDashboard() {
           </Button>
         </div>
       </div>
+=======
+      <Link to="/" className="dashboard-title-link">
+        <h1 className="dashboard-title">Je te crois</h1>
+      </Link>
+>>>>>>> 1b9ba19fb4973e5d58fc1c3d538659da968458f5
 
       {isEverythingFine === false && (
         <div className="progress-bar">
