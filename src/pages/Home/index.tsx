@@ -20,6 +20,11 @@ export function Home() {
         <span>Connexion</span>
       </Link>
 
+      {/* About Us Button - Below Login */}
+      <Link to="/about" className="about-us-btn">
+        <span>À propos</span>
+      </Link>
+
       <div className="home-container">
         <div className="home-header">
           <h1 className="home-title">Je te crois</h1>
