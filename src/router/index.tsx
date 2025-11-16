@@ -9,6 +9,7 @@ import { Login } from "@/pages/Login/index";
 import { Register } from "@/pages/Register/index";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { Splash } from "@/pages/Splash/index";
+import { AboutUs } from "@/pages/AboutUs/index";
 
 function SplashThenHome() {
     const navigate = useNavigate();
@@ -69,6 +70,10 @@ const routes = [
     {
         path: "/find-out",
         element: <FindOut />
+    },
+    {
+        path: "/about",
+        element: <AboutUs />
     },
 ]
 
