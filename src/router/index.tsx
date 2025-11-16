@@ -6,13 +6,14 @@ import { TeacherDashboard } from "@/pages/TeacherDashboard/index";
 import { HelpOthers } from "@/pages/HelpOthers/index";
 import { FindOut } from "@/pages/FindOut/index";
 import { Splash } from "@/pages/Splash/index";
+import { AboutUs } from "@/pages/AboutUs/index";
 
 function SplashThenHome() {
     const navigate = useNavigate();
     useEffect(() => {
         const timer = setTimeout(() => {
             navigate("/home", { replace: true });
-        }, 1800); // 显示约1.8秒的动画后进入首页
+        }, 4100); // show splash for ~4 seconds before going to /home
         return () => clearTimeout(timer);
     }, [navigate]);
     return <Splash />;
@@ -46,6 +47,10 @@ const routes = [
     {
         path: "/find-out",
         element: <FindOut />
+    },
+    {
+        path: "/about",
+        element: <AboutUs />
     },
 ]
 
