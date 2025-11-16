@@ -168,19 +168,19 @@
 }
 
 .question-icon {
-  width: 96px;
-  height: 96px;
+  width: 104px;
+  height: 104px;
   object-fit: contain;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
 }
 
 .question-icon-placeholder {
-  width: 96px;
-  height: 96px;
+  width: 104px;
+  height: 104px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 76px;
+  font-size: 84px;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
 }
 
@@ -341,7 +341,7 @@
 }
 
 .location-icon {
-  font-size: 64px;
+  font-size: 72px;
   transition: transform 0.3s ease;
 }
 
@@ -404,6 +404,95 @@
   transform: scale(1.05);
 }
 
+/* Frequency slider */
+.frequency-slider {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.frequency-slider-input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 16px; /* 更粗的轨道，便于可见与点击 */
+  border-radius: 999px;
+  /* 轨道颜色：从不频繁到频繁，黄色 -> 红色 */
+  background: linear-gradient(90deg, #FFE08A 0%, #FFC65A 33%, #FF8A5B 66%, #FF4D4D 100%);
+  border: 4px solid #7dc4e4;
+  box-shadow: 0 2px 0 0 #7dc4e4, 0 6px 14px rgba(125, 196, 228, 0.25) inset;
+  outline: none;
+}
+
+.frequency-slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 40px;  /* 更大的触控目标 */
+  height: 40px;
+  border-radius: 50%;
+  background: #FFE08A;
+  border: 3px solid #D9B200;
+  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.frequency-slider-input::-webkit-slider-thumb:hover {
+  transform: scale(1.08);
+}
+
+.frequency-slider-input::-moz-range-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #FFE08A;
+  border: 3px solid #D9B200;
+  box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.frequency-slider-input::-moz-range-thumb:hover {
+  transform: scale(1.08);
+}
+
+/* Focus 可见性：高对比环，辅助键盘与读屏用户 */
+.frequency-slider-input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(37, 150, 190, 0.35), 0 0 0 8px rgba(37, 150, 190, 0.2);
+}
+
+/* 根据频率调整拇指颜色（从黄到红） */
+.frequency-slider-input.freq-0::-webkit-slider-thumb { background: #FFE08A; border-color: #D9B200; }
+.frequency-slider-input.freq-1::-webkit-slider-thumb { background: #FFC65A; border-color: #C99A1A; }
+.frequency-slider-input.freq-2::-webkit-slider-thumb { background: #FF8A5B; border-color: #C05A33; }
+.frequency-slider-input.freq-3::-webkit-slider-thumb { background: #FF4D4D; border-color: #B22222; }
+.frequency-slider-input.freq-0::-moz-range-thumb { background: #FFE08A; border-color: #D9B200; }
+.frequency-slider-input.freq-1::-moz-range-thumb { background: #FFC65A; border-color: #C99A1A; }
+.frequency-slider-input.freq-2::-moz-range-thumb { background: #FF8A5B; border-color: #C05A33; }
+.frequency-slider-input.freq-3::-moz-range-thumb { background: #FF4D4D; border-color: #B22222; }
+
+.frequency-slider-labels {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: center;
+  justify-items: center;
+  gap: 8px;
+}
+
+.frequency-slider-label {
+  font-size: 16px; /* 更大标签便于识读 */
+  font-weight: 800;
+  color: #4da8d1;
+}
+
+.frequency-slider-label.active {
+  color: #2596be;
+  text-shadow: 0 1px 0 rgba(37, 150, 190, 0.2);
+}
 /* Review Summary */
 .review-summary {
   background: #f0f8fb;
@@ -448,8 +537,15 @@
 }
 
 .symbol-category-badge-image {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+/* Augment icon size for category buttons (Physical/Verbal/Social) to match Cyber emoji */
+.locations-grid .symbol-category-badge-image {
+  width: 72px;
+  height: 72px;
   object-fit: contain;
 }
 
@@ -487,6 +583,12 @@
   gap: 8px;
   padding: 12px 20px;
   position: relative;
+  overflow: hidden; /* 防止悬浮填充动画或伪元素溢出 */
+  transform-origin: center;
+  isolation: isolate; /* 将伪元素限制在按钮边界内进行合成 */
+  background-clip: padding-box; /* 背景限制在圆角内 */
+  clip-path: inset(0 round 20px); /* 强制裁剪到与圆角一致的路径，裁剪阴影/动画 */
+  contain: paint; /* 将绘制限制在元素边界内，避免合成溢出 */
 }
 
 .form-actions button::before {
@@ -503,6 +605,7 @@
   color: #4da8d1 !important;
   box-shadow: 0 3px 0 0 #7dc4e4, 0 6px 12px rgba(125, 196, 228, 0.2) !important;
   border-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2,2 Q25,1 50,2 T98,2 Q99,25 98,50 T98,98 Q75,99 50,98 T2,98 Q1,75 2,50 T2,2' fill='none' stroke='%237dc4e4' stroke-width='3'/%3E%3C/svg%3E") 3 !important;
+  overflow: hidden;
 }
 
 .previous-btn::before {
@@ -511,7 +614,7 @@
 }
 
 .previous-btn:hover {
-  transform: translateY(-3px) rotate(1deg);
+  transform: translateY(-3px);
   border-color: #4da8d1 !important;
   background: #f0f8fb !important;
   box-shadow: 0 4px 0 0 #4da8d1, 0 8px 16px rgba(77, 168, 209, 0.3) !important;
@@ -524,21 +627,22 @@
   box-shadow: 0 5px 0 0 #1a7ba8, 0 10px 20px rgba(37, 150, 190, 0.4) !important;
   font-weight: 700 !important;
   border-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2,2 Q25,1 50,2 T98,2 Q99,25 98,50 T98,98 Q75,99 50,98 T2,98 Q1,75 2,50 T2,2' fill='none' stroke='%231a7ba8' stroke-width='4'/%3E%3C/svg%3E") 4 !important;
+  overflow: hidden;
+  transition: none !important; /* 禁用过渡动画 */
 }
 
 .next-btn:not([disabled])::before {
-  content: '→';
-  color: white;
-  font-size: 36px;
+  content: none !important; /* 删除箭头 */
+  display: none !important;
 }
 
 .next-btn:not([disabled]):hover {
-  transform: translateY(-5px) rotate(-2deg) scale(1.05);
-  box-shadow: 0 7px 0 0 #1a7ba8, 0 14px 28px rgba(37, 150, 190, 0.5) !important;
+  transform: none; /* 取消位移 */
+  box-shadow: 0 5px 0 0 #1a7ba8, 0 10px 20px rgba(37, 150, 190, 0.4) !important; /* 维持默认阴影 */
 }
 
 .next-btn:not([disabled]):hover::before {
-  transform: scale(1.1);
+  transform: none; /* 保持箭头不缩放 */
 }
 
 /* Success Message */

@@ -55,6 +55,8 @@ export function StudentDashboard() {
   const [wasEverythingFine, setWasEverythingFine] = useState<boolean>(false);
   const [symbols, setSymbols] = useState<SymbolSelection[]>([]);
   const [categorySelections, setCategorySelections] = useState<Record<string, SymbolSelection[]>>({});
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [physicalMethods, setPhysicalMethods] = useState<string[]>([]);
   const [bodyMap, setBodyMap] = useState<BodyMapSelection[]>([]);
   const [emotion, setEmotion] = useState<EmotionScale | null>(null);
   const [location, setLocation] = useState<Location | null>(null);
@@ -68,6 +70,19 @@ export function StudentDashboard() {
     loadLocations();
   }, []);
 
+  // Keep step valid when selection changes (e.g., physical deselected while on physical step)
+  useEffect(() => {
+    if (isEverythingFine === false) {
+      const steps = getVisibleSteps();
+      if (!steps.includes(step)) {
+        // Move to the nearest valid step (prefer next logical)
+        const posAfterRemoval = steps.find((s) => s > step) ?? steps[steps.length - 1];
+        setStep(posAfterRemoval);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEverythingFine, selectedCategories]);
+
   const loadLocations = async () => {
     try {
       const data = await getLocations();
@@ -78,6 +93,23 @@ export function StudentDashboard() {
       return [];
     }
   };
+
+  // Compute the visible steps dynamically to avoid gaps and empty screens
+  const getVisibleSteps = () => {
+    if (isEverythingFine === null) return [1];
+    if (isEverythingFine === true) return [1]; // Auto-submit path handled separately
+    // isEverythingFine === false
+    const base = [1, 2];
+    if (selectedCategories.includes('physical')) {
+      base.push(3);
+    }
+    // 6 review, 7 emotion, 8 location, 9 frequency, 10 safety
+    base.push(6, 7, 8, 9, 10);
+    return base;
+  };
+
+  const visibleSteps = getVisibleSteps();
+  const currentPos = visibleSteps.indexOf(step);
 
   const handleSubmit = async () => {
     // Normal submission flow (only called when reporting something)
@@ -121,6 +153,8 @@ export function StudentDashboard() {
     setWasEverythingFine(false);
     setSymbols([]);
     setCategorySelections({});
+    setSelectedCategories([]);
+    setPhysicalMethods([]);
     setBodyMap([]);
     setEmotion(null);
     setLocation(null);
@@ -134,7 +168,12 @@ export function StudentDashboard() {
       case 1:
         return isEverythingFine !== null;
       case 2:
+        return selectedCategories.length > 0;
       case 3:
+        if (selectedCategories.includes('physical')) {
+          return bodyMap.length > 0 && physicalMethods.length > 0;
+        }
+        return true;
       case 4:
       case 5:
         return true;
@@ -165,6 +204,78 @@ export function StudentDashboard() {
       setSymbols(allSymbols);
       return updated;
     });
+  };
+
+  const toggleCategory = (categoryId: string) => {
+    setSelectedCategories((prev) => {
+      const exists = prev.includes(categoryId);
+      const next = exists ? prev.filter((c) => c !== categoryId) : [...prev, categoryId];
+      // Build symbols: include non-physical category markers + physical methods if physical chosen
+      const nonPhysicalSymbols: SymbolSelection[] = next
+        .filter((c) => c !== 'physical')
+        .map((c) => {
+          const meta = SYMBOL_CATEGORIES.find((x) => x.id === c);
+          return {
+            id: `category_${c}`,
+            label: meta?.label || c,
+            category: c,
+          };
+        });
+      const physicalSymbols: SymbolSelection[] = next.includes('physical')
+        ? physicalMethods.map((m) => ({
+            id: `physical_${m}`,
+            label: m === 'pousser' ? 'pousser' : m === 'frapper' ? 'frapper' : 'donner un coup de pied',
+            category: 'physical',
+          }))
+        : [];
+      setSymbols([...physicalSymbols, ...nonPhysicalSymbols]);
+      if (!next.includes('physical')) {
+        setPhysicalMethods([]);
+        setBodyMap([]);
+      }
+      return next;
+    });
+  };
+
+  const togglePhysicalMethod = (methodId: string) => {
+    setPhysicalMethods((prev) => {
+      const exists = prev.includes(methodId);
+      const next = exists ? prev.filter((m) => m !== methodId) : [...prev, methodId];
+      const physicalSymbols: SymbolSelection[] = selectedCategories.includes('physical')
+        ? next.map((m) => ({
+            id: `physical_${m}`,
+            label: m === 'pousser' ? 'pousser' : m === 'frapper' ? 'frapper' : 'donner un coup de pied',
+            category: 'physical',
+          }))
+        : [];
+      const nonPhysicalSymbols: SymbolSelection[] = selectedCategories
+        .filter((c) => c !== 'physical')
+        .map((c) => {
+          const meta = SYMBOL_CATEGORIES.find((x) => x.id === c);
+          return {
+            id: `category_${c}`,
+            label: meta?.label || c,
+            category: c,
+          };
+        });
+      setSymbols([...physicalSymbols, ...nonPhysicalSymbols]);
+      return next;
+    });
+  };
+
+  const handleNext = () => {
+    const steps = visibleSteps;
+    const pos = steps.indexOf(step);
+    if (pos >= 0 && pos < steps.length - 1) {
+      setStep(steps[pos + 1]);
+    }
+  };
+  const handlePrev = () => {
+    const steps = visibleSteps;
+    const pos = steps.indexOf(step);
+    if (pos > 0) {
+      setStep(steps[pos - 1]);
+    }
   };
 
   const handleEverythingFine = async (value: boolean) => {
@@ -261,12 +372,12 @@ export function StudentDashboard() {
       {isEverythingFine === false && (
         <div className="progress-bar">
           <div className="progress-steps">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((s) => (
+            {visibleSteps.map((_, idx) => (
               <div
-                key={s}
-                className={`progress-step ${s <= step ? 'active' : ''} ${s === step ? 'current' : ''}`}
+                key={idx}
+                className={`progress-step ${idx <= currentPos ? 'active' : ''} ${idx === currentPos ? 'current' : ''}`}
               >
-                {s}
+                {idx + 1}
               </div>
             ))}
           </div>
@@ -305,31 +416,64 @@ export function StudentDashboard() {
           </div>
         )}
 
-        {/* Category steps: 2-5 (Physical, Verbal, Social, Cyber) */}
-        {isEverythingFine === false && step >= 2 && step <= 5 && (() => {
-          const categoryIndex = step - 2;
-          const category = SYMBOL_CATEGORIES[categoryIndex];
-          return (
-            <div className="form-step form-step-no-scroll">
-              <CategorySymbolSelector
-                category={category.id}
-                categoryLabel={category.label}
-                categoryIcon={category.icon}
-                onSelect={(selected) => handleCategorySelection(category.id, selected)}
-                selectedSymbols={categorySelections[category.id] || []}
-                onSkip={() => {
-                  if ((categorySelections[category.id] || []).length === 0) {
-                    setTimeout(() => {
-                      if (step < 5) {
-                        setStep(step + 1);
-                      }
-                    }, 300);
-                  }
-                }}
-              />
+        {/* Step 2: Choose main category (Corps/Physical, Langage/Verbal, Social, Cyber) - multi-select */}
+        {isEverythingFine === false && step === 2 && (
+          <div className="form-step">
+            <div className="question-header">
+              <div className="question-icon-placeholder">🧭</div>
+              <h3>Quel type ? Corps, Langage, Social, ou Cyber ?</h3>
             </div>
-          );
-        })()}
+            <div className="locations-grid">
+              {SYMBOL_CATEGORIES.map((cat) => {
+                const isImageIcon =
+                  typeof cat.icon === 'string' &&
+                  (cat.icon.includes('/') || cat.icon.includes('\\') || cat.icon.endsWith('.png'));
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => toggleCategory(cat.id)}
+                    className={`location-card ${selectedCategories.includes(cat.id) ? 'selected' : ''}`}
+                  >
+                    <span className="location-icon">
+                      {isImageIcon ? <img src={cat.icon as any} alt={cat.label} className="symbol-category-badge-image" /> : cat.icon}
+                    </span>
+                    <span className="location-name">{cat.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: If physical -> choose body part and attack methods */}
+        {isEverythingFine === false && step === 3 && selectedCategories.includes('physical') && (
+          <div className="form-step">
+            <div className="question-header">
+              <img src={whichBodyPartIcon} alt="Which body part" className="question-icon" />
+              <h3>Quelle partie du corps a été touchée ?</h3>
+            </div>
+            <BodyMap onSelect={setBodyMap} selectedPoints={bodyMap} />
+            <div className="question-header" style={{ marginTop: 24 }}>
+              <div className="question-icon-placeholder">🥊</div>
+              <h3>Comment as-tu été attaqué·e ?</h3>
+            </div>
+            <div className="frequency-options">
+              {[
+                { id: 'pousser', label: 'pousser' },
+                { id: 'frapper', label: 'frapper' },
+                { id: 'donner_un_coup_de_pied', label: 'donner un coup de pied' },
+              ].map((m) => (
+                <button
+                  key={m.id}
+                  onClick={() => togglePhysicalMethod(m.id)}
+                  className={`frequency-btn ${physicalMethods.includes(m.id) ? 'selected' : ''}`}
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Step 6: Summary/Review */}
         {isEverythingFine === false && step === 6 && (
@@ -399,18 +543,66 @@ export function StudentDashboard() {
           <div className="form-step">
             <div className="question-header">
               <img src={howOftenIcon} alt="How often" className="question-icon" />
-              <h3>How often does this happen?</h3>
+              <h3 id="frequency-question">How often does this happen?</h3>
             </div>
-            <div className="frequency-options">
-              {frequencyOptions.map((opt) => (
-                <button
-                  key={opt.value}
-                  onClick={() => setFrequency({ value: opt.value })}
-                  className={`frequency-btn ${frequency?.value === opt.value ? 'selected' : ''}`}
-                >
-                  {opt.label}
-                </button>
-              ))}
+            <div className="frequency-slider">
+              <input
+                type="range"
+                min={0}
+                max={3}
+                step={1}
+                value={
+                  frequency?.value === 'always'
+                    ? 3
+                    : frequency?.value === 'often'
+                    ? 2
+                    : frequency?.value === 'sometimes'
+                    ? 1
+                    : 0
+                }
+                onChange={(e) => {
+                  const idx = Number(e.target.value);
+                  const val = idx === 3 ? 'always' : idx === 2 ? 'often' : idx === 1 ? 'sometimes' : 'once';
+                  setFrequency({ value: val });
+                }}
+                className={`frequency-slider-input ${
+                  frequency?.value === 'always'
+                    ? 'freq-3'
+                    : frequency?.value === 'often'
+                    ? 'freq-2'
+                    : frequency?.value === 'sometimes'
+                    ? 'freq-1'
+                    : 'freq-0'
+                }`}
+                aria-label="Frequency"
+                aria-labelledby="frequency-question"
+                aria-valuemin={0}
+                aria-valuemax={3}
+                aria-valuenow={
+                  frequency?.value === 'always'
+                    ? 3
+                    : frequency?.value === 'often'
+                    ? 2
+                    : frequency?.value === 'sometimes'
+                    ? 1
+                    : 0
+                }
+                aria-valuetext={
+                  frequency?.value === 'always'
+                    ? 'Always'
+                    : frequency?.value === 'often'
+                    ? 'Often'
+                    : frequency?.value === 'sometimes'
+                    ? 'Sometimes'
+                    : 'Once'
+                }
+              />
+              <div className="frequency-slider-labels">
+                <span className={`frequency-slider-label ${frequency?.value === 'once' ? 'active' : ''}`}>Once</span>
+                <span className={`frequency-slider-label ${frequency?.value === 'sometimes' ? 'active' : ''}`}>Sometimes</span>
+                <span className={`frequency-slider-label ${frequency?.value === 'often' ? 'active' : ''}`}>Often</span>
+                <span className={`frequency-slider-label ${frequency?.value === 'always' ? 'active' : ''}`}>Always</span>
+              </div>
             </div>
           </div>
         )}
@@ -424,31 +616,15 @@ export function StudentDashboard() {
           </div>
         )}
 
-        {isEverythingFine === false && step === 11 && (
-          <div className="form-step">
-            {symbols.some((s) => s.category === 'physical') ? (
-              <>
-                <div className="question-header">
-                  <img src={whichBodyPartIcon} alt="Which body part" className="question-icon" />
-                  <h3>Where were you touched?</h3>
-                </div>
-                <BodyMap onSelect={setBodyMap} selectedPoints={bodyMap} />
-              </>
-            ) : (
-              <div style={{ textAlign: 'center', padding: '40px 20px', color: '#FF8CC8', fontSize: '18px', fontWeight: 600 }}>
-                No physical incidents reported. You can proceed to submit.
-              </div>
-            )}
-          </div>
-        )}
+        {/* Step 11 removed in new flow (physical details now at step 3) */}
 
         {isEverythingFine === false && step > 1 && (
           <div className="form-actions">
-            <Button variant="outline" onClick={() => setStep(step - 1)} className="previous-btn">
+            <Button variant="outline" onClick={handlePrev} className="previous-btn">
               Previous
             </Button>
-            {step < 11 ? (
-              <Button onClick={() => setStep(step + 1)} disabled={!canProceed()} className="next-btn">
+            {currentPos < visibleSteps.length - 1 ? (
+              <Button onClick={handleNext} disabled={!canProceed()} className="next-btn">
                 Next
               </Button>
             ) : (

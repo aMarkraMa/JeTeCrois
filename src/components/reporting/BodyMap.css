@@ -1,15 +1,15 @@
 .body-map-container {
   width: 100%;
-  max-width: 300px;
+  max-width: 360px;
   margin: 0 auto;
 }
 
 .body-map-wrapper {
-  border: 2px dashed #d1d5db;
-  border-radius: 12px;
-  padding: 20px;
-  background: #f9fafb;
-  cursor: crosshair;
+  border: 3px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 16px;
+  background: #fafafa;
+  cursor: pointer;
 }
 
 .body-map-svg {
@@ -18,12 +18,21 @@
   display: block;
 }
 
-.body-map-svg circle {
-  transition: all 0.2s;
+.body-region {
+  fill: rgba(125, 196, 228, 0.2);
+  stroke: #7dc4e4;
+  stroke-width: 2;
+  transition: fill 0.15s ease, transform 0.15s ease, stroke 0.15s ease;
+  cursor: pointer;
 }
 
-.body-map-svg circle:hover {
-  r: 10;
-  filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.5));
+.body-region:hover {
+  fill: rgba(77, 168, 209, 0.25);
+  stroke: #4da8d1;
+}
+
+.body-region.selected {
+  fill: rgba(239, 68, 68, 0.28);
+  stroke: #dc2626;
 }
 

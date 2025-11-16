@@ -67,7 +67,9 @@
   align-items: center;
   gap: 12px;
   position: relative;
-  overflow: visible;
+  overflow: hidden; /* 防止填充/伪元素溢出 */
+  contain: paint; /* 限制绘制区域在按钮内 */
+  isolation: isolate; /* 避免外部合成影响 */
   box-shadow: 
     0 3px 0 0 #7dc4e4,
     0 6px 12px rgba(125, 196, 228, 0.2),
@@ -81,28 +83,25 @@
 .thermometer-item-horizontal::before {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
+  inset: 0; /* 覆盖整个按钮 */
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0); /* 初始无填充 */
+  transition: background 0.3s ease; /* 使用透明度过渡而不是尺寸扩张 */
+  z-index: 0; /* 保证边框与文字在其上层显示 */
 }
 
 .thermometer-item-horizontal:hover::before {
-  width: 400px;
-  height: 400px;
+  background: rgba(255, 255, 255, 0.18); /* 轻微填充效果，且被圆角裁剪 */
 }
 
 .thermometer-item-horizontal:hover {
-  transform: translateY(-8px) rotate(-2deg) scale(1.1);
+  transform: translateY(-4px); /* 移除旋转/缩放以避免边界溢出 */
   box-shadow: 
-    0 6px 0 0 currentColor,
-    0 12px 24px rgba(0, 0, 0, 0.25);
+    0 5px 0 0 currentColor,
+    0 10px 20px rgba(0, 0, 0, 0.2);
   filter: brightness(1.1);
   border-width: 4px;
+  border-color: #7dc4e4; /* 悬浮时保持边框可见 */
 }
 
 .thermometer-item-horizontal.active {
@@ -110,7 +109,7 @@
     0 8px 0 0 currentColor,
     0 16px 32px rgba(0, 0, 0, 0.3),
     inset 0 2px 4px rgba(255, 255, 255, 0.3);
-  transform: translateY(-8px) rotate(-3deg) scale(1.12);
+  transform: translateY(-6px); /* 保持轻微位移，不旋转缩放 */
   font-weight: 800;
   border-width: 4px;
   animation: itemPulse 2s ease-in-out infinite;
