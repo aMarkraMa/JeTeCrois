@@ -9,6 +9,15 @@ from typing import List, Optional
 from datetime import datetime
 import uuid
 
+from mapping import (
+    map_location_id,
+    map_emotion_id,
+    map_safety_thermometer_id,
+    map_frequency_index_id,
+    map_body_part_id,
+)
+
+
 app = FastAPI(title="Are You Safe API", version="1.0.0")
 
 # Configuration CORS pour permettre les requêtes depuis le frontend
@@ -30,6 +39,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+from supabase_client import supabase
+from mapping import (
+    map_location_id,
+    map_emotion_id,
+    map_safety_thermometer_id,
+    map_frequency_index_id,
+)
+
 
 # Modèles de données
 class SymbolSelection(BaseModel):
@@ -137,6 +155,167 @@ def get_locations():
     """Récupérer tous les lieux disponibles"""
     return LOCATIONS_DATA
 
+def ensure_user_exists_by_name(report: Report):
+    """
+    Checks if a user exists in the `users` table based ONLY on the name.
+    If not found, create the user.
+    """
+
+    # Check if user exists by name
+    user_resp = (
+        supabase.from_("users")
+        .select("*")
+        .eq("front_student_id", report.studentId)
+        .limit(1)
+        .execute()
+    )
+
+    if user_resp.data:
+        # User already exists -> stop here
+        return user_resp.data[0]
+
+    # Create new user
+    new_user = {
+        "front_student_id": report.studentId,
+        "name": report.studentName
+    }
+
+    insert_resp = supabase.from_("users").insert(new_user).execute()
+
+    if user_resp.error:
+        print("Supabase error:", user_resp.error)
+
+    if insert_resp.error:
+        print("Supabase insert error:", insert_resp.error)
+
+    return insert_resp.data
+
+
+STUDENT_ROLE_TYPE_ID = "1"  # Identifier pour student
+
+def ensure_student_role_id() -> int:
+    """Ensure there is a 'student' row in user_role and return its id."""
+    # Try to find the role
+    resp = (
+        supabase.from_("user_role")
+        .select("user_role_id")
+        .eq("user_role_type_id", STUDENT_ROLE_TYPE_ID)  
+        .limit(1)
+        .execute()
+    )
+
+    rows = resp.data or []
+    if rows:
+        return rows[0]["user_role_id"]
+
+    # If not found, insert it
+    insert_resp = (
+        supabase.from_("user_role")
+        .insert(
+            {
+                "user_role_type_id": STUDENT_ROLE_TYPE_ID,  
+            }
+        )
+        .execute()
+    )
+
+    if getattr(insert_resp, "error", None):
+        print("Supabase error in ensure_student_role_id:", insert_resp.error)
+        raise RuntimeError("Failed to create user_role row for student")
+
+    if not insert_resp.data:
+        raise RuntimeError("No data returned when inserting user_role")
+
+    return insert_resp.data[0]["user_role_id"]
+
+def ensure_user_account(report: Report) -> int:
+    """Get or create a user_acc row for this student and return user_acc_id."""
+    # 👇 make sure the role exists and get its id
+    student_role_id = ensure_student_role_id()
+
+    # 1) Try to find existing user_acc
+    resp = (
+        supabase.from_("user_acc")
+        .select("user_acc_id")
+        .eq("user_role_id", student_role_id)
+        .eq("person_affected", report.studentName)
+        .limit(1)
+        .execute()
+    )
+
+    rows = resp.data or []
+    if rows:
+        return rows[0]["user_acc_id"]
+
+    # 2) If not found, insert user_acc
+    insert_data = {
+        "user_role_id": student_role_id,
+        "person_affected": report.studentName,
+    }
+
+    insert_resp = supabase.from_("user_acc").insert(insert_data).execute()
+
+    if getattr(insert_resp, "error", None):
+        print("Supabase error in ensure_user_account:", insert_resp.error)
+        raise RuntimeError("Failed to create user_acc entry")
+
+    if not insert_resp.data:
+        raise RuntimeError("No data returned when inserting user_acc")
+
+    return insert_resp.data[0]["user_acc_id"]
+
+
+def create_user_acc_history(report: Report) -> None:
+    """Insert one row in user_acc_history per body part in bodyMap.
+
+    If bodyMap is empty/None, we still insert a single generic row.
+    """
+    user_acc_id = ensure_user_account(report)
+    event_time = report.timestamp or datetime.utcnow()
+
+    # Shared info across all rows for this report
+    base_description = ", ".join([s.label for s in report.symbols])
+    base_data = {
+        "event_time": event_time.isoformat(),
+        "event_location_id": map_location_id(report.location.id),
+        "emotion_id": map_emotion_id(report.emotion.level),
+        "user_acc_id": user_acc_id,
+       # "safety_thermometer_id": map_safety_thermometer_id(
+       #     report.safety.feeling, report.safety.level
+       # ),
+        "frequency_index_id": map_frequency_index_id(report.frequency.value),
+    }
+
+    # Case 1: there *are* body parts selected -> one row per bodyMap entry
+    if report.bodyMap:
+        rows_to_insert = []
+        for bm in report.bodyMap:
+            body_part_id = map_body_part_id(bm.bodyPart)
+            event_description = f"{base_description} - {bm.bodyPart}"
+
+            row = {
+                **base_data,
+                "event_description": event_description,
+            }
+
+            # Only include body_part_id if that column exists in your table
+            # If you don't have this column yet, remove this line:
+            row["body_part_id"] = body_part_id
+
+            rows_to_insert.append(row)
+
+        supabase.from_("user_acc_history").insert(rows_to_insert).execute()
+        return
+
+    # Case 2: no bodyMap -> single generic row (like before)
+    history_row = {
+        **base_data,
+        "event_description": base_description,
+        # "body_part_id": None  
+    }
+
+    supabase.from_("user_acc_history").insert(history_row).execute()
+    
 @app.post("/api/reports", response_model=Report)
 def create_report(report_data: ReportCreate):
     """Créer un nouveau signalement"""
@@ -154,7 +333,44 @@ def create_report(report_data: ReportCreate):
         status="pending"
     )
     reports_db.append(new_report)
+    ensure_user_exists_by_name(new_report)
+    create_user_acc_history(new_report)
     return new_report
+    
+    
+@app.post("/api/from-latest-report")  # FK
+def create_user_from_latest_report():
+    """Insert studentId + studentName from the latest report"""
+
+    #Check latest report from memory endpoint
+    if not reports_db:
+        raise HTTPException(status_code=404, detail="Aucun signalement trouvé")
+
+    latest_report = max(reports_db, key=lambda x: x.timestamp or datetime.min)
+
+    #Prepare payload for the 'users' table
+    user_payload = {
+        "front_student_id": latest_report.studentId,
+        "name": latest_report.studentName
+    }
+
+
+    #Insert / upsert in Supabase
+    resp = supabase.from_("users").upsert(
+        user_payload,
+        on_conflict="front_student_id"
+    ).execute()
+
+    if getattr(resp, "error", None):
+        print("Supabase error:", resp.error)
+        raise HTTPException(status_code=500, detail="Erreur lors de l'insertion utilisateur")
+
+    # Return confirmation
+    return {
+        "message": "Utilisateur inséré depuis le dernier signalement",
+        "latest_report_id": latest_report.id,
+        "user": resp.data[0]
+    }
 
 @app.get("/api/reports", response_model=List[Report])
 def get_reports():
