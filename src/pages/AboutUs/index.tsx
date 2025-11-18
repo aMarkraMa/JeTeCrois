@@ -97,17 +97,6 @@ export function AboutUs() {
               <div className="workflow-step">
                 <div className="step-number">3</div>
                 <div className="step-content">
-                  <h3>Questions visuelles</h3>
-                  <img src="/screenshot_type.png"  alt="Signalement" className="workflow-icon" />
-
-                  <p>L'application pose des questions visuelles (librairie AAC).</p>
-                </div>
-              </div>
-              <div className="workflow-arrow">→</div>
-              
-              <div className="workflow-step">
-                <div className="step-number">4</div>
-                <div className="step-content">
                   <h3>Précisions</h3>
                   <img src="/screenshot_bodypart.png"  alt="Signalement" className="workflow-icon" />
 
@@ -115,6 +104,19 @@ export function AboutUs() {
                 </div>
               </div>
               <div className="workflow-arrow">→</div>
+
+              <div className="workflow-step">
+                <div className="step-number">4</div>
+                <div className="step-content">
+                  <h3>Humeur</h3>
+                  <img src="/screenshot_moodmeter.png"  alt="Signalement" className="workflow-icon" />
+
+                  <p>L'élève peut exprimer ses émotions</p>
+                </div>
+              </div>
+              <div className="workflow-arrow">→</div>
+              
+
               
 
               <div className="workflow-step">
@@ -131,10 +133,10 @@ export function AboutUs() {
               <div className="workflow-step">
                 <div className="step-number">6</div>
                 <div className="step-content">
-                  <h3>Envoi</h3>
+                  <h3>Notification du responsable</h3>
                   <img src="/screenshot_teacher_dashboard.png"  alt="Signalement" className="workflow-icon" />
 
-                  <p>Le signalement est envoyé au responsable d'établissement.</p>
+                  <p>Le responsable d'établissement reçoit le signalement avec un rapport écrit généré par l'application et peut agir en conséquence.</p>
                 </div>
               </div>
             </div>
