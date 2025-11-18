@@ -421,8 +421,8 @@
 .footer-cta {
   background: var(--gradient-sunset);
   border: none;
-  padding: 4%;
   text-align: center;
+  padding: 4%  4% 200px 4% ;
 }
 
 .footer-cta h2 {

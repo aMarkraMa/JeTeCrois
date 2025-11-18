@@ -1,12 +1,25 @@
 /**
  * About Us Page - Information about Je Te Crois
  */
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { ArasaacPicto } from '../../components/ui/ArasaacPicto';
 import './AboutUs.css';
 
 export function AboutUs() {
+  useEffect(() => {
+    // Charger le script Fillout
+    const script = document.createElement('script');
+    script.src = 'https://server.fillout.com/embed/v1/';
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      // Nettoyer le script lors du démontage
+      document.body.removeChild(script);
+    };
+  }, []);
   return (
     <div className="aboutus-page">
       {/* Back Button */}
@@ -135,9 +148,13 @@ export function AboutUs() {
         <footer className="footer-cta">
           <h2>Prêt à faire la différence ?</h2>
           <p>Rejoignez-nous dans la lutte contre le harcèlement scolaire.</p>
-          <Link to="/teacher" className="cta-secondary">
-            Essayez maintenant
-          </Link>
+          <div 
+            style={{width: '100%', height: '500px'}} 
+            data-fillout-id="imjudugNyGus" 
+            data-fillout-embed-type="standard" 
+            data-fillout-inherit-parameters 
+            data-fillout-dynamic-resize
+          ></div>
         </footer>
       </div>
     </div>
