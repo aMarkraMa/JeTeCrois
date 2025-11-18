@@ -1,0 +1,21 @@
+/**
+ * ArasaacPicto Component Styles
+ */
+
+.arasaac-picto {
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.arasaac-picto:hover {
+  transform: scale(1.05);
+}
+
+.arasaac-picto.clickable {
+  cursor: pointer;
+}
+
+.arasaac-picto.clickable:active {
+  transform: scale(0.95);
+}
+

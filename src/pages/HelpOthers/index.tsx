@@ -30,18 +30,18 @@ import {
 import './HelpOthers.css';
 
 const frequencyOptions = [
-  { value: 'once', label: 'Once' },
-  { value: 'sometimes', label: 'Sometimes' },
-  { value: 'often', label: 'Often' },
-  { value: 'always', label: 'Always' },
+  { value: 'once', label: 'Une fois' },
+  { value: 'sometimes', label: 'Parfois' },
+  { value: 'often', label: 'Souvent' },
+  { value: 'always', label: 'Toujours' },
 ];
 
 // Category configuration for step-by-step symbol selection
 const SYMBOL_CATEGORIES = [
-  { id: 'physical', label: 'Physical Harassment', icon: attackIcon },
-  { id: 'verbal', label: 'Verbal Harassment', icon: mockIcon },
-  { id: 'social', label: 'Social Harassment', icon: isolationIcon },
-  { id: 'cyber', label: 'Cyber Harassment', icon: '💻' }, // No icon file for cyber, keep emoji
+  { id: 'physical', label: 'Harcèlement physique', icon: attackIcon },
+  { id: 'verbal', label: 'Harcèlement verbal', icon: mockIcon },
+  { id: 'social', label: 'Harcèlement social', icon: isolationIcon },
+  { id: 'cyber', label: 'Cyber-harcèlement', icon: '💻' }, // No icon file for cyber, keep emoji
 ];
 
 export function HelpOthers() {
@@ -79,11 +79,11 @@ export function HelpOthers() {
 
   const handleSubmit = async () => {
     if (!symbols.length) {
-      alert('Please select at least one incident to report');
+      alert('Veuillez sélectionner au moins un incident à signaler');
       return;
     }
     if (!emotion || !location || !frequency || !safety || !studentName.trim()) {
-      alert('Please fill in all required fields including the student name');
+      alert('Veuillez remplir tous les champs requis, y compris le nom de l\'élève');
       return;
     }
 
@@ -105,7 +105,7 @@ export function HelpOthers() {
       }, 3000);
     } catch (error) {
       console.error('Error submitting report:', error);
-      alert('Error sending report. Please try again.');
+      alert('Erreur lors de l\'envoi du signalement. Veuillez réessayer.');
     } finally {
       setIsSubmitting(false);
     }
@@ -167,16 +167,16 @@ export function HelpOthers() {
       <div className="help-others-page">
         <div className="success-message">
           <div className="success-icon">✓</div>
-          <h2>Report Sent Successfully</h2>
-          <p>Your report for {studentName || 'the student'} has been received. A teacher will review it shortly.</p>
+          <h2>Signalement envoyé avec succès</h2>
+          <p>Votre signalement pour {studentName || 'l\'élève'} a été reçu. Un enseignant l'examinera bientôt.</p>
           <div className="success-actions">
             <Link to="/">
               <Button variant="outline" className="previous-btn">
-                Back to Home
+                Retour à l'accueil
               </Button>
             </Link>
             <Button onClick={resetForm} className="next-btn">
-              Create New Report
+              Créer un nouveau signalement
             </Button>
           </div>
         </div>
@@ -225,7 +225,7 @@ export function HelpOthers() {
       <div className="report-form">
         {step === 1 && (
           <div className="form-step">
-            <h3 className="text-lg font-semibold mb-4">Qui a besoin d'aide?</h3>
+            <h3 className="text-lg font-semibold mb-4">Qui a besoin d'aide ?</h3>
             <div className="student-name-input">
               <input
                 type="text"
@@ -272,10 +272,10 @@ export function HelpOthers() {
           <div className="form-step">
             <div className="question-header">
               <div className="question-icon-placeholder">📋</div>
-              <h3>Review Your Report</h3>
+              <h3>Révision de votre signalement</h3>
             </div>
             <div className="review-summary">
-              <p>You have selected the following incidents:</p>
+              <p>Vous avez sélectionné les incidents suivants :</p>
               {symbols.length > 0 ? (
                 <div className="selected-symbols-list">
                   {symbols.map((symbol) => {
@@ -298,7 +298,7 @@ export function HelpOthers() {
                   })}
                 </div>
               ) : (
-                <p style={{ color: '#FF8CC8', fontStyle: 'italic' }}>No incidents selected. You can go back to add incidents.</p>
+                <p style={{ color: '#FF8CC8', fontStyle: 'italic' }}>Aucun incident sélectionné. Vous pouvez revenir en arrière pour ajouter des incidents.</p>
               )}
             </div>
           </div>
@@ -314,7 +314,7 @@ export function HelpOthers() {
           <div className="form-step">
             <div className="question-header">
               <img src={whereIcon} alt="Where" className="question-icon" />
-              <h3>Where did this happen?</h3>
+              <h3>Où cela s'est-il passé ?</h3>
             </div>
             <div className="locations-grid">
               {locations.map((loc) => (
@@ -335,7 +335,7 @@ export function HelpOthers() {
           <div className="form-step">
             <div className="question-header">
               <img src={howOftenIcon} alt="How often" className="question-icon" />
-              <h3>How often does this happen?</h3>
+              <h3>À quelle fréquence cela se produit-il ?</h3>
             </div>
             <div className="frequency-options">
               {frequencyOptions.map((opt) => (
@@ -366,13 +366,13 @@ export function HelpOthers() {
               <>
                 <div className="question-header">
                   <img src={whichBodyPartIcon} alt="Which body part" className="question-icon" />
-                  <h3>Where were you touched?</h3>
+                  <h3>Où a-t-il été touché ?</h3>
                 </div>
                 <BodyMap onSelect={setBodyMap} selectedPoints={bodyMap} />
               </>
             ) : (
               <div style={{ textAlign: 'center', padding: '40px 20px', color: '#FF8CC8', fontSize: '18px', fontWeight: 600 }}>
-                No physical incidents reported. You can proceed to submit.
+                Aucun incident physique signalé. Vous pouvez procéder à l'envoi.
               </div>
             )}
           </div>
@@ -381,22 +381,22 @@ export function HelpOthers() {
         {step === 1 && (
           <div className="form-actions">
             <Button onClick={() => setStep(step + 1)} disabled={!canProceed()} className="next-btn">
-              Next
+              Suivant
             </Button>
           </div>
         )}
         {step > 1 && (
           <div className="form-actions">
             <Button variant="outline" onClick={() => setStep(step - 1)} className="previous-btn">
-              Previous
+              Précédent
             </Button>
             {step < 11 ? (
               <Button onClick={() => setStep(step + 1)} disabled={!canProceed()} className="next-btn">
-                Next
+                Suivant
               </Button>
             ) : (
               <Button onClick={handleSubmit} disabled={!canProceed() || isSubmitting} className="next-btn">
-                {isSubmitting ? 'Sending...' : 'Submit Report'}
+                {isSubmitting ? 'Envoi...' : 'Envoyer le signalement'}
               </Button>
             )}
           </div>

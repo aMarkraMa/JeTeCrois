@@ -14,9 +14,9 @@ import { Sparkles, Loader2, Download, Users, TrendingUp, TrendingDown, AlertTria
 import './TeacherDashboard.css';
 
 const statusLabels: Record<string, { label: string; color: string }> = {
-  pending: { label: 'Pending', color: 'bg-yellow-100 text-yellow-800' },
-  reviewed: { label: 'Reviewed', color: 'bg-blue-100 text-blue-800' },
-  resolved: { label: 'Resolved', color: 'bg-green-100 text-green-800' },
+  pending: { label: 'En attente', color: 'bg-yellow-100 text-yellow-800' },
+  reviewed: { label: 'Examiné', color: 'bg-blue-100 text-blue-800' },
+  resolved: { label: 'Résolu', color: 'bg-green-100 text-green-800' },
 };
 
 const emotionColors: Record<string, string> = {
@@ -71,7 +71,7 @@ export function TeacherDashboard() {
       }
     } catch (error) {
       console.error('Error updating status:', error);
-      alert('Error updating status');
+      alert('Erreur lors de la mise à jour du statut');
     }
   };
 
@@ -112,7 +112,7 @@ export function TeacherDashboard() {
       saveRecommendations(selectedReport.id, recommendations);
     } catch (error) {
       console.error('Error generating AI recommendations:', error);
-      alert('Error generating recommendations. Please try again.');
+      alert('Erreur lors de la génération des recommandations. Veuillez réessayer.');
     } finally {
       setIsGeneratingAI(false);
     }
@@ -136,7 +136,7 @@ export function TeacherDashboard() {
   if (isLoading) {
     return (
       <div className="teacher-dashboard">
-        <div className="loading">Loading reports...</div>
+        <div className="loading">Chargement des signalements...</div>
       </div>
     );
   }
@@ -146,7 +146,7 @@ export function TeacherDashboard() {
       <div className="dashboard-header">
         <div className="dashboard-header-top">
           <div>
-            <h1 className="dashboard-title">Teacher Dashboard</h1>
+            <h1 className="dashboard-title">Tableau de bord enseignant</h1>
             {currentUser && (
               <p className="teacher-name">Enseignant: {currentUser.name}</p>
             )}
@@ -171,7 +171,7 @@ export function TeacherDashboard() {
         </div>
         <div className="dashboard-subtitle-row">
           <p className="dashboard-subtitle">
-            {reports.length} total report(s) • {reports.filter((r) => r.status === 'pending').length} pending
+            {reports.length} signalement(s) au total • {reports.filter((r) => r.status === 'pending').length} en attente
           </p>
           <div className="view-toggle">
             <Button
@@ -183,7 +183,7 @@ export function TeacherDashboard() {
                 setStudentAnalysis(null);
               }}
             >
-              Reports
+              Signalements
             </Button>
             <Button
               variant={view === 'students' ? 'default' : 'outline'}
@@ -194,7 +194,7 @@ export function TeacherDashboard() {
               }}
             >
               <Users className="users-icon" />
-              Students
+              Élèves
             </Button>
           </div>
         </div>
@@ -209,32 +209,32 @@ export function TeacherDashboard() {
               onClick={() => setFilter('all')}
               className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
             >
-              All ({reports.length})
+              Tous ({reports.length})
             </button>
             <button
               onClick={() => setFilter('pending')}
               className={`filter-btn ${filter === 'pending' ? 'active' : ''}`}
             >
-              Pending ({reports.filter((r) => r.status === 'pending').length})
+              En attente ({reports.filter((r) => r.status === 'pending').length})
             </button>
             <button
               onClick={() => setFilter('reviewed')}
               className={`filter-btn ${filter === 'reviewed' ? 'active' : ''}`}
             >
-              Reviewed ({reports.filter((r) => r.status === 'reviewed').length})
+              Examinés ({reports.filter((r) => r.status === 'reviewed').length})
             </button>
             <button
               onClick={() => setFilter('resolved')}
               className={`filter-btn ${filter === 'resolved' ? 'active' : ''}`}
             >
-              Resolved ({reports.filter((r) => r.status === 'resolved').length})
+              Résolus ({reports.filter((r) => r.status === 'resolved').length})
             </button>
           </div>
 
           <div className="reports-grid">
             {filteredReports.length === 0 ? (
               <div className="empty-state">
-                <p>No reports to display</p>
+                <p>Aucun signalement à afficher</p>
               </div>
             ) : (
               filteredReports.map((report) => (
@@ -268,7 +268,7 @@ export function TeacherDashboard() {
                   
                   <div className="report-preview">
                     <div className="preview-item">
-                      <span className="preview-label">Symbols:</span>
+                      <span className="preview-label">Symboles :</span>
                       <div className="symbols-preview">
                         {report.symbols.slice(0, 3).map((s) => (
                           <span key={s.id} className="symbol-tag">
@@ -281,11 +281,11 @@ export function TeacherDashboard() {
                       </div>
                     </div>
                     <div className="preview-item">
-                      <span className="preview-label">Location:</span>
+                      <span className="preview-label">Lieu :</span>
                       <span>{report.location.icon} {report.location.name}</span>
                     </div>
                     <div className="preview-item">
-                      <span className="preview-label">Emotion:</span>
+                      <span className="preview-label">Émotion :</span>
                       <div
                         className="emotion-indicator"
                         style={{ backgroundColor: emotionColors[report.emotion.color] }}
@@ -303,7 +303,7 @@ export function TeacherDashboard() {
         {selectedReport && (
           <div className="report-detail">
             <div className="detail-header">
-              <h2>Report Details</h2>
+              <h2>Détails du signalement</h2>
               <div className="detail-header-actions">
                 <Button
                   variant="outline"
@@ -316,7 +316,7 @@ export function TeacherDashboard() {
                   className="export-pdf-btn"
                 >
                   <Download className="download-icon" />
-                  Export PDF
+                  Exporter en PDF
                 </Button>
                 <button
                   onClick={() => setSelectedReport(null)}
@@ -329,15 +329,15 @@ export function TeacherDashboard() {
 
             <div className="detail-content">
               <div className="detail-section">
-                <h3>Student</h3>
+                <h3>Élève</h3>
                 <p>{selectedReport.studentName} (ID: {selectedReport.studentId})</p>
                 <p className="text-sm text-muted-foreground">
-                  Reported on {formatDate(selectedReport.timestamp)}
+                  Signalé le {formatDate(selectedReport.timestamp)}
                 </p>
               </div>
 
               <div className="detail-section">
-                <h3>Incident Type</h3>
+                <h3>Type d'incident</h3>
                 <div className="symbols-list">
                   {selectedReport.symbols.map((symbol) => (
                     <div key={symbol.id} className="symbol-item">
@@ -350,7 +350,7 @@ export function TeacherDashboard() {
 
               {selectedReport.bodyMap && selectedReport.bodyMap.length > 0 && (
                 <div className="detail-section">
-                  <h3>Physical Harassment</h3>
+                  <h3>Harcèlement physique</h3>
                   <div className="body-parts-list">
                     {selectedReport.bodyMap.map((point, index) => (
                       <span key={index} className="body-part-tag">
@@ -362,24 +362,24 @@ export function TeacherDashboard() {
               )}
 
               <div className="detail-section">
-                <h3>Location</h3>
+                <h3>Lieu</h3>
                 <p>
                   {selectedReport.location.icon} {selectedReport.location.name}
                 </p>
               </div>
 
               <div className="detail-section">
-                <h3>Frequency</h3>
+                <h3>Fréquence</h3>
                 <p>
-                  {selectedReport.frequency.value === 'once' && 'Once'}
-                  {selectedReport.frequency.value === 'sometimes' && 'Sometimes'}
-                  {selectedReport.frequency.value === 'often' && 'Often'}
-                  {selectedReport.frequency.value === 'always' && 'Always'}
+                  {selectedReport.frequency.value === 'once' && 'Une fois'}
+                  {selectedReport.frequency.value === 'sometimes' && 'Parfois'}
+                  {selectedReport.frequency.value === 'often' && 'Souvent'}
+                  {selectedReport.frequency.value === 'always' && 'Toujours'}
                 </p>
               </div>
 
               <div className="detail-section">
-                <h3>Emotional State</h3>
+                <h3>État émotionnel</h3>
                 <div className="emotion-display">
                   <div className="emotion-bar">
                     <div
@@ -396,7 +396,7 @@ export function TeacherDashboard() {
               </div>
 
               <div className="detail-section">
-                <h3>Safety Level</h3>
+                <h3>Niveau de sécurité</h3>
                 <div className="safety-display">
                   <div className="safety-bar">
                     <div
@@ -418,38 +418,38 @@ export function TeacherDashboard() {
               </div>
 
               <div className="detail-section">
-                <h3>Status</h3>
+                <h3>Statut</h3>
                 <div className="status-actions">
                   <Button
                     variant={selectedReport.status === 'pending' ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => handleStatusChange(selectedReport.id, 'pending')}
                   >
-                    Pending
+                    En attente
                   </Button>
                   <Button
                     variant={selectedReport.status === 'reviewed' ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => handleStatusChange(selectedReport.id, 'reviewed')}
                   >
-                    Reviewed
+                    Examiné
                   </Button>
                   <Button
                     variant={selectedReport.status === 'resolved' ? 'default' : 'outline'}
                     size="sm"
                     onClick={() => handleStatusChange(selectedReport.id, 'resolved')}
                   >
-                    Resolved
+                    Résolu
                   </Button>
                 </div>
               </div>
 
               <div className="detail-section">
-                <h3>AI Recommendations</h3>
+                <h3>Recommandations IA</h3>
                 {!showAIRecommendations ? (
                   <div className="ai-generate-section">
                     <p className="ai-description">
-                      Generate AI-powered actionable recommendations based on this report.
+                      Générer des recommandations exploitables basées sur l'IA pour ce signalement.
                     </p>
                     <Button
                       onClick={handleGenerateAIRecommendations}
@@ -460,12 +460,12 @@ export function TeacherDashboard() {
                       {isGeneratingAI ? (
                         <>
                           <Loader2 className="spinner-icon" />
-                          Generating...
+                          Génération...
                         </>
                       ) : (
                         <>
                           <Sparkles className="sparkles-icon" />
-                          Generate Recommendations
+                          Générer des recommandations
                         </>
                       )}
                     </Button>
@@ -475,7 +475,7 @@ export function TeacherDashboard() {
                     <div className="ai-header">
                       <div className="ai-urgency">
                         <span className={`urgency-badge urgency-${aiRecommendations.urgency}`}>
-                          {aiRecommendations.urgency.toUpperCase()} URGENCY
+                          URGENCE {aiRecommendations.urgency.toUpperCase()}
                         </span>
                       </div>
                       <Button
@@ -487,18 +487,18 @@ export function TeacherDashboard() {
                         }}
                         className="hide-ai-btn"
                       >
-                        Hide
+                        Masquer
                       </Button>
                     </div>
 
                     <div className="ai-summary">
-                      <h4>Summary</h4>
+                      <h4>Résumé</h4>
                       <p>{aiRecommendations.summary}</p>
                     </div>
 
                     <div className="ai-actions">
                       <div className="action-group">
-                        <h4>Immediate Actions</h4>
+                        <h4>Actions immédiates</h4>
                         <ul>
                           {aiRecommendations.immediateActions.map((action, index) => (
                             <li key={index}>{action}</li>
@@ -507,7 +507,7 @@ export function TeacherDashboard() {
                       </div>
 
                       <div className="action-group">
-                        <h4>Short-term Actions</h4>
+                        <h4>Actions à court terme</h4>
                         <ul>
                           {aiRecommendations.shortTermActions.map((action, index) => (
                             <li key={index}>{action}</li>
@@ -516,7 +516,7 @@ export function TeacherDashboard() {
                       </div>
 
                       <div className="action-group">
-                        <h4>Long-term Actions</h4>
+                        <h4>Actions à long terme</h4>
                         <ul>
                           {aiRecommendations.longTermActions.map((action, index) => (
                             <li key={index}>{action}</li>
@@ -526,7 +526,7 @@ export function TeacherDashboard() {
                     </div>
 
                     <div className="ai-resources">
-                      <h4>Resources</h4>
+                      <h4>Ressources</h4>
                       <ul>
                         {aiRecommendations.resources.map((resource, index) => (
                           <li key={index}>{resource}</li>
@@ -535,7 +535,7 @@ export function TeacherDashboard() {
                     </div>
 
                     <div className="ai-notes">
-                      <h4>Analysis Notes</h4>
+                      <h4>Notes d'analyse</h4>
                       <p>{aiRecommendations.notes}</p>
                     </div>
 
@@ -549,12 +549,12 @@ export function TeacherDashboard() {
                       {isGeneratingAI ? (
                         <>
                           <Loader2 className="spinner-icon" />
-                          Regenerating...
+                          Régénération...
                         </>
                       ) : (
                         <>
                           <Sparkles className="sparkles-icon" />
-                          Regenerate
+                          Régénérer
                         </>
                       )}
                     </Button>
@@ -563,14 +563,14 @@ export function TeacherDashboard() {
               </div>
 
               <div className="detail-section">
-                <h3>Teacher Notes</h3>
+                <h3>Notes de l'enseignant</h3>
                 <textarea
                   value={teacherNotes}
                   onChange={(e) => {
                     setTeacherNotes(e.target.value);
                     setNotesSaved(false);
                   }}
-                  placeholder="Add your notes here..."
+                  placeholder="Ajoutez vos notes ici..."
                   className="notes-textarea"
                   rows={4}
                 />
@@ -581,7 +581,7 @@ export function TeacherDashboard() {
                   size="sm"
                   disabled={notesSaved}
                 >
-                  {notesSaved ? '✓ Saved' : 'Save Notes'}
+                  {notesSaved ? '✓ Enregistré' : 'Enregistrer les notes'}
                 </Button>
               </div>
             </div>
@@ -648,7 +648,7 @@ function StudentsView({ reports, selectedStudent, studentAnalysis, onSelectStude
         <div className="student-detail-container">
           <div className="student-detail-header">
             <Button variant="outline" size="sm" onClick={onBack} className="back-btn">
-              ← Back to Students
+              ← Retour aux élèves
             </Button>
             <div className="student-header-info">
               <h2 className="student-detail-title">{selectedStudent.name}</h2>
@@ -658,7 +658,7 @@ function StudentsView({ reports, selectedStudent, studentAnalysis, onSelectStude
 
           {studentAnalysis && (
             <div className="analysis-section">
-              <h3 className="analysis-title">Long-term Analysis</h3>
+              <h3 className="analysis-title">Analyse à long terme</h3>
               
               <div className={`trend-alert ${studentAnalysis.trendAnalysis.hasRecurringProblems ? 'critical' : studentAnalysis.trendAnalysis.isWorsening ? 'warning' : 'info'}`}>
                 <div className="trend-icon">
@@ -677,39 +677,39 @@ function StudentsView({ reports, selectedStudent, studentAnalysis, onSelectStude
 
               <div className="analysis-grid">
                 <div className="analysis-card">
-                  <h4>Overview</h4>
+                  <h4>Aperçu</h4>
                   <div className="analysis-stats">
                     <div className="stat-item">
-                      <span className="stat-label">Total Reports:</span>
+                      <span className="stat-label">Signalements totaux :</span>
                       <span className="stat-value">{studentAnalysis.totalReports}</span>
                     </div>
                     <div className="stat-item">
-                      <span className="stat-label">First Report:</span>
+                      <span className="stat-label">Premier signalement :</span>
                       <span className="stat-value">{formatDate(studentAnalysis.firstReportDate)}</span>
                     </div>
                     <div className="stat-item">
-                      <span className="stat-label">Last Report:</span>
+                      <span className="stat-label">Dernier signalement :</span>
                       <span className="stat-value">{formatDate(studentAnalysis.lastReportDate)}</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="analysis-card">
-                  <h4>Average Levels</h4>
+                  <h4>Niveaux moyens</h4>
                   <div className="analysis-stats">
                     <div className="stat-item">
-                      <span className="stat-label">Emotion:</span>
+                      <span className="stat-label">Émotion :</span>
                       <span className="stat-value">{studentAnalysis.averageEmotionLevel}/5</span>
                     </div>
                     <div className="stat-item">
-                      <span className="stat-label">Safety:</span>
+                      <span className="stat-label">Sécurité :</span>
                       <span className="stat-value">{studentAnalysis.averageSafetyLevel}/5</span>
                     </div>
                   </div>
                 </div>
 
                 <div className="analysis-card">
-                  <h4>Most Common Categories</h4>
+                  <h4>Catégories les plus fréquentes</h4>
                   <div className="category-list">
                     {studentAnalysis.mostCommonCategories.slice(0, 3).map((cat, index) => (
                       <div key={index} className="category-item">
@@ -721,19 +721,19 @@ function StudentsView({ reports, selectedStudent, studentAnalysis, onSelectStude
                 </div>
 
                 <div className="analysis-card">
-                  <h4>Frequency Pattern</h4>
+                  <h4>Modèle de fréquence</h4>
                   <div className="frequency-stats">
                     <div className="frequency-item">
-                      <span>Once: {studentAnalysis.frequencyPattern.once}</span>
+                      <span>Une fois : {studentAnalysis.frequencyPattern.once}</span>
                     </div>
                     <div className="frequency-item">
-                      <span>Sometimes: {studentAnalysis.frequencyPattern.sometimes}</span>
+                      <span>Parfois : {studentAnalysis.frequencyPattern.sometimes}</span>
                     </div>
                     <div className="frequency-item">
-                      <span>Often: {studentAnalysis.frequencyPattern.often}</span>
+                      <span>Souvent : {studentAnalysis.frequencyPattern.often}</span>
                     </div>
                     <div className="frequency-item">
-                      <span>Always: {studentAnalysis.frequencyPattern.always}</span>
+                      <span>Toujours : {studentAnalysis.frequencyPattern.always}</span>
                     </div>
                   </div>
                 </div>
@@ -741,7 +741,7 @@ function StudentsView({ reports, selectedStudent, studentAnalysis, onSelectStude
 
               {studentAnalysis.recurringIssues.length > 0 && (
                 <div className="recurring-issues">
-                  <h4>⚠️ Recurring Issues Detected</h4>
+                  <h4>⚠️ Problèmes récurrents détectés</h4>
                   <ul>
                     {studentAnalysis.recurringIssues.map((issue, index) => (
                       <li key={index}>{issue}</li>
@@ -753,11 +753,11 @@ function StudentsView({ reports, selectedStudent, studentAnalysis, onSelectStude
           )}
 
           <div className="student-reports-section">
-            <h3 className="reports-section-title">All Reports ({studentReports.length})</h3>
+            <h3 className="reports-section-title">Tous les signalements ({studentReports.length})</h3>
             <div className="student-reports-list">
               {studentReports.length === 0 ? (
                 <div className="empty-state">
-                  <p>No reports found for this student.</p>
+                  <p>Aucun signalement trouvé pour cet élève.</p>
                 </div>
               ) : (
                 studentReports
@@ -772,7 +772,7 @@ function StudentsView({ reports, selectedStudent, studentAnalysis, onSelectStude
                       </div>
                       <div className="student-report-content">
                         <div className="report-info-row">
-                          <span className="info-label">Categories:</span>
+                          <span className="info-label">Catégories :</span>
                           <div className="report-categories">
                             {report.symbols.map((s) => (
                               <span key={s.id} className="category-badge-small">
@@ -782,16 +782,16 @@ function StudentsView({ reports, selectedStudent, studentAnalysis, onSelectStude
                           </div>
                         </div>
                         <div className="report-info-row">
-                          <span className="info-label">Location:</span>
+                          <span className="info-label">Lieu :</span>
                           <span>{report.location.icon} {report.location.name}</span>
                         </div>
                         <div className="report-info-row">
-                          <span className="info-label">Emotion:</span>
-                          <span>Level {report.emotion.level}/5</span>
+                          <span className="info-label">Émotion :</span>
+                          <span>Niveau {report.emotion.level}/5</span>
                         </div>
                         <div className="report-info-row">
-                          <span className="info-label">Safety:</span>
-                          <span>Level {report.safety.level}/5</span>
+                          <span className="info-label">Sécurité :</span>
+                          <span>Niveau {report.safety.level}/5</span>
                         </div>
                       </div>
                     </div>
@@ -807,11 +807,11 @@ function StudentsView({ reports, selectedStudent, studentAnalysis, onSelectStude
   return (
     <div className="students-list-view">
       <div className="students-header">
-        <h2 className="students-title">All Students</h2>
+        <h2 className="students-title">Tous les élèves</h2>
         <div className="students-search">
           <input
             type="text"
-            placeholder="Search by name or ID..."
+            placeholder="Rechercher par nom ou ID..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
@@ -822,7 +822,7 @@ function StudentsView({ reports, selectedStudent, studentAnalysis, onSelectStude
       <div className="students-grid">
         {filteredStudents.length === 0 ? (
           <div className="empty-state">
-            <p>No students found.</p>
+            <p>Aucun élève trouvé.</p>
           </div>
         ) : (
           filteredStudents.map((student) => {
@@ -844,12 +844,12 @@ function StudentsView({ reports, selectedStudent, studentAnalysis, onSelectStude
                 </div>
                 <div className="student-card-preview">
                   <div className="preview-item">
-                    <span className="preview-label">Reports:</span>
+                    <span className="preview-label">Signalements :</span>
                     <span className="preview-value">{studentReports.length}</span>
                   </div>
                   {pendingCount > 0 && (
                     <div className="preview-item">
-                      <span className="preview-label">Pending:</span>
+                      <span className="preview-label">En attente :</span>
                       <span className={`status-badge ${statusLabels.pending.color}`}>
                         {pendingCount}
                       </span>
@@ -857,7 +857,7 @@ function StudentsView({ reports, selectedStudent, studentAnalysis, onSelectStude
                   )}
                   {resolvedCount > 0 && (
                     <div className="preview-item">
-                      <span className="preview-label">Resolved:</span>
+                      <span className="preview-label">Résolus :</span>
                       <span className={`status-badge ${statusLabels.resolved.color}`}>
                         {resolvedCount}
                       </span>

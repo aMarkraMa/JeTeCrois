@@ -35,7 +35,7 @@ export function Home() {
             <div className="option-icon">
               <img src={myselfIcon} alt="Get help for myself" />
             </div>
-            <h2 className="option-title">Get help for myself</h2>
+            <h2 className="option-title">Obtenir de l'aide pour moi</h2>
             <div className="option-arrow">→</div>
           </Link>
 
@@ -43,7 +43,7 @@ export function Home() {
             <div className="option-icon">
               <img src={othersIcon} alt="Help someone in need" />
             </div>
-            <h2 className="option-title">Help someone in need</h2>
+            <h2 className="option-title">Aider quelqu'un dans le besoin</h2>
             <div className="option-arrow">→</div>
           </Link>
 
@@ -51,7 +51,7 @@ export function Home() {
             <div className="option-icon">
               <img src={trainIcon} alt="Find out" />
             </div>
-            <h2 className="option-title">Find out</h2>
+            <h2 className="option-title">En savoir plus</h2>
             <div className="option-arrow">→</div>
           </Link>
         </div>

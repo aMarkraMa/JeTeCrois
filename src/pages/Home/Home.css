@@ -1,6 +1,6 @@
 .home-page {
   height: 100vh;
-  background: #d4eded;
+  background: var(--background);
   padding: 48px 24px;
   position: relative;
   overflow: hidden;

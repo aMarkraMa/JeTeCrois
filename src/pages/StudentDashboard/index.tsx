@@ -31,18 +31,18 @@ import {
 import './StudentDashboard.css';
 
 const frequencyOptions = [
-  { value: 'once', label: 'Once' },
-  { value: 'sometimes', label: 'Sometimes' },
-  { value: 'often', label: 'Often' },
-  { value: 'always', label: 'Always' },
+  { value: 'once', label: 'Une fois' },
+  { value: 'sometimes', label: 'Parfois' },
+  { value: 'often', label: 'Souvent' },
+  { value: 'always', label: 'Toujours' },
 ];
 
 // Category configuration for step-by-step symbol selection
 const SYMBOL_CATEGORIES = [
-  { id: 'physical', label: 'Physical Harassment', icon: attackIcon },
-  { id: 'verbal', label: 'Verbal Harassment', icon: mockIcon },
-  { id: 'social', label: 'Social Harassment', icon: isolationIcon },
-  { id: 'cyber', label: 'Cyber Harassment', icon: '💻' }, // No icon file for cyber, keep emoji
+  { id: 'physical', label: 'Harcèlement physique', icon: attackIcon },
+  { id: 'verbal', label: 'Harcèlement verbal', icon: mockIcon },
+  { id: 'social', label: 'Harcèlement social', icon: isolationIcon },
+  { id: 'cyber', label: 'Cyber-harcèlement', icon: '💻' }, // No icon file for cyber, keep emoji
 ];
 
 export function StudentDashboard() {
@@ -114,11 +114,11 @@ export function StudentDashboard() {
   const handleSubmit = async () => {
     // Normal submission flow (only called when reporting something)
     if (!symbols.length) {
-      alert('Please select at least one incident to report');
+      alert('Veuillez sélectionner au moins un incident à signaler');
       return;
     }
     if (!emotion || !location || !frequency || !safety) {
-      alert('Please fill in all required fields');
+      alert('Veuillez remplir tous les champs requis');
       return;
     }
 
@@ -141,7 +141,7 @@ export function StudentDashboard() {
       }, 3000);
     } catch (error) {
       console.error('Error submitting report:', error);
-      alert('Error sending report. Please try again.');
+      alert('Erreur lors de l\'envoi du signalement. Veuillez réessayer.');
     } finally {
       setIsSubmitting(false);
     }
@@ -325,20 +325,20 @@ export function StudentDashboard() {
       <div className="student-dashboard">
         <div className="success-message">
           <div className="success-icon">✓</div>
-          <h2>Report Sent Successfully</h2>
+          <h2>Signalement envoyé avec succès</h2>
           <p>
             {wasEverythingFine
-              ? "Thank you for letting us know everything is fine. Your report has been received."
-              : "Your report has been received. A teacher will review it shortly."}
+              ? "Merci de nous avoir fait savoir que tout va bien. Votre signalement a été reçu."
+              : "Votre signalement a été reçu. Un enseignant l'examinera bientôt."}
           </p>
           <div className="success-actions">
             <Link to="/">
               <Button variant="outline" className="previous-btn">
-                Back to Home
+                Retour à l'accueil
               </Button>
             </Link>
             <Button onClick={resetForm} className="next-btn">
-              Create New Report
+              Créer un nouveau signalement
             </Button>
           </div>
         </div>
@@ -389,7 +389,7 @@ export function StudentDashboard() {
           <div className="form-step">
             <div className="question-header">
               <img src={howAreYouIcon} alt="How are you doing" className="question-icon" />
-              <h3>How are you doing today?</h3>
+              <h3>Comment te sens-tu aujourd'hui ?</h3>
             </div>
             <div className="everything-fine-options">
               <button
@@ -398,8 +398,8 @@ export function StudentDashboard() {
               >
                 <div className="fine-icon">⚠️</div>
                 <div className="fine-content">
-                  <h4 className="fine-title">I need to report something</h4>
-                  <p className="fine-description">Something happened that I want to report</p>
+                  <h4 className="fine-title">J'ai besoin de signaler quelque chose</h4>
+                  <p className="fine-description">Quelque chose s'est passé que je veux signaler</p>
                 </div>
               </button>
               <button
@@ -408,8 +408,8 @@ export function StudentDashboard() {
               >
                 <div className="fine-icon">✅</div>
                 <div className="fine-content">
-                  <h4 className="fine-title">Everything is fine</h4>
-                  <p className="fine-description">No incidents to report</p>
+                  <h4 className="fine-title">Tout va bien</h4>
+                  <p className="fine-description">Aucun incident à signaler</p>
                 </div>
               </button>
             </div>
@@ -480,10 +480,10 @@ export function StudentDashboard() {
           <div className="form-step">
             <div className="question-header">
               <div className="question-icon-placeholder">📋</div>
-              <h3>Review Your Report</h3>
+              <h3>Révision de ton signalement</h3>
             </div>
             <div className="review-summary">
-              <p>You have selected the following incidents:</p>
+              <p>Tu as sélectionné les incidents suivants :</p>
               {symbols.length > 0 ? (
                 <div className="selected-symbols-list">
                   {symbols.map((symbol) => {
@@ -506,7 +506,7 @@ export function StudentDashboard() {
                   })}
                 </div>
               ) : (
-                <p style={{ color: '#FF8CC8', fontStyle: 'italic' }}>No incidents selected. You can go back to add incidents.</p>
+                <p style={{ color: '#FF8CC8', fontStyle: 'italic' }}>Aucun incident sélectionné. Tu peux revenir en arrière pour ajouter des incidents.</p>
               )}
             </div>
           </div>
@@ -522,7 +522,7 @@ export function StudentDashboard() {
           <div className="form-step">
             <div className="question-header">
               <img src={whereIcon} alt="Where" className="question-icon" />
-              <h3>Where did this happen?</h3>
+              <h3>Où cela s'est-il passé ?</h3>
             </div>
             <div className="locations-grid">
               {locations.map((loc) => (
@@ -543,7 +543,7 @@ export function StudentDashboard() {
           <div className="form-step">
             <div className="question-header">
               <img src={howOftenIcon} alt="How often" className="question-icon" />
-              <h3 id="frequency-question">How often does this happen?</h3>
+              <h3 id="frequency-question">À quelle fréquence cela se produit-il ?</h3>
             </div>
             <div className="frequency-slider">
               <input
@@ -598,10 +598,10 @@ export function StudentDashboard() {
                 }
               />
               <div className="frequency-slider-labels">
-                <span className={`frequency-slider-label ${frequency?.value === 'once' ? 'active' : ''}`}>Once</span>
-                <span className={`frequency-slider-label ${frequency?.value === 'sometimes' ? 'active' : ''}`}>Sometimes</span>
-                <span className={`frequency-slider-label ${frequency?.value === 'often' ? 'active' : ''}`}>Often</span>
-                <span className={`frequency-slider-label ${frequency?.value === 'always' ? 'active' : ''}`}>Always</span>
+                <span className={`frequency-slider-label ${frequency?.value === 'once' ? 'active' : ''}`}>Une fois</span>
+                <span className={`frequency-slider-label ${frequency?.value === 'sometimes' ? 'active' : ''}`}>Parfois</span>
+                <span className={`frequency-slider-label ${frequency?.value === 'often' ? 'active' : ''}`}>Souvent</span>
+                <span className={`frequency-slider-label ${frequency?.value === 'always' ? 'active' : ''}`}>Toujours</span>
               </div>
             </div>
           </div>
@@ -621,15 +621,15 @@ export function StudentDashboard() {
         {isEverythingFine === false && step > 1 && (
           <div className="form-actions">
             <Button variant="outline" onClick={handlePrev} className="previous-btn">
-              Previous
+              Précédent
             </Button>
             {currentPos < visibleSteps.length - 1 ? (
               <Button onClick={handleNext} disabled={!canProceed()} className="next-btn">
-                Next
+                Suivant
               </Button>
             ) : (
               <Button onClick={handleSubmit} disabled={!canProceed() || isSubmitting} className="next-btn">
-                {isSubmitting ? 'Sending...' : 'Submit Report'}
+                {isSubmitting ? 'Envoi...' : 'Envoyer le signalement'}
               </Button>
             )}
           </div>
@@ -637,7 +637,7 @@ export function StudentDashboard() {
         {isEverythingFine === true && isSubmitting && (
           <div className="form-actions">
             <div className="submitting-message">
-              <p>Submitting your report...</p>
+              <p>Envoi de ton signalement...</p>
             </div>
           </div>
         )}

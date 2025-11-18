@@ -3,6 +3,7 @@
  */
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { ArasaacPicto } from '../../components/ui/ArasaacPicto';
 import './AboutUs.css';
 
 export function AboutUs() {
@@ -19,7 +20,7 @@ export function AboutUs() {
         <header className="hero-section">
           <div className="hero-content">
             <div className="hero-image">
-              <img src="https://api.arasaac.org/v1/pictograms/20401?plural=false&color=true&backgroundColor=none&url=false&download=false" alt="Je te crois" className="hero-logo" />
+              <ArasaacPicto id={20401} size="100%" alt="Je te crois" className="hero-logo" />
             </div>
             <div className="hero-text">
               <h1 className="hero-title">Je te crois</h1>
@@ -37,17 +38,17 @@ export function AboutUs() {
             <h2 className="section-title">Conçu pour les élèves vulnérables</h2>
             <div className="audience-grid">
               <div className="audience-card">
-                <div className="audience-icon">👥</div>
+                <ArasaacPicto id={37444} align="center" size="50%" alt="Enfant autistique" className="audience-icon" />
                 <h3>Élèves autistiques harcelés</h3>
                 <p>Une interface adaptée pour faciliter l'expression</p>
               </div>
               <div className="audience-card">
-                <div className="audience-icon">📖</div>
-                <h3>Élèves dyslexiques</h3>
+              <ArasaacPicto id={32558} align="center" size="50%" alt="Enfant autistique" className="audience-icon" />
+              <h3>Élèves dyslexiques</h3>
                 <p>Communication visuelle pour surmonter les difficultés de lecture</p>
               </div>
               <div className="audience-card">
-                <div className="audience-icon">🌍</div>
+              <ArasaacPicto id={8173} align="center" size="50%" alt="Enfant autistique" className="audience-icon" />
                 <h3>Élèves non francophones</h3>
                 <p>Pictogrammes universels pour une communication sans barrière linguistique</p>
               </div>
@@ -134,7 +135,7 @@ export function AboutUs() {
         <footer className="footer-cta">
           <h2>Prêt à faire la différence ?</h2>
           <p>Rejoignez-nous dans la lutte contre le harcèlement scolaire.</p>
-          <Link to="/student" className="cta-secondary">
+          <Link to="/teacher" className="cta-secondary">
             Essayez maintenant
           </Link>
         </footer>

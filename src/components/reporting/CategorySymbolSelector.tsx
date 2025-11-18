@@ -93,7 +93,7 @@ export function CategorySymbolSelector({
           )}
         </div>
         <h3 className="category-title">{categoryLabel}</h3>
-        <p className="category-description">Select what happened, or choose "None" if nothing happened in this category</p>
+        <p className="category-description">Sélectionne ce qui s'est passé, ou choisis "Aucun" si rien ne s'est passé dans cette catégorie</p>
       </div>
 
       {/* Symbols grid */}
@@ -123,7 +123,7 @@ export function CategorySymbolSelector({
           })
         ) : (
           <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '20px', color: '#64748b' }}>
-            Loading symbols...
+            Chargement des symboles...
           </div>
         )}
         {/* None option - last in grid */}
@@ -135,7 +135,7 @@ export function CategorySymbolSelector({
           )}
         >
           <div className="symbol-icon-category none-icon-symbol">✓</div>
-          <div className="symbol-label-category">None</div>
+          <div className="symbol-label-category">Aucun</div>
         </button>
       </div>
     </div>

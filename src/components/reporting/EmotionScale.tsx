@@ -13,11 +13,11 @@ import howDoYouFeelIcon from '@/assets/icons/questions/How_u_feel.png';
 import './EmotionScale.css';
 
 const emotionLevels = [
-  { level: 1, color: 'green', label: 'Quiet', icon: feelingQuiet, feeling: 'quiet' },
+  { level: 1, color: 'green', label: 'Calme', icon: feelingQuiet, feeling: 'quiet' },
   { level: 2, color: 'yellow', label: 'Confusion', icon: feelingConfusion, feeling: 'confusion' },
-  { level: 3, color: 'orange', label: 'Pessimism', icon: feelingPessimism, feeling: 'pessimism' },
-  { level: 4, color: 'red', label: 'Fear', icon: feelingFear, feeling: 'fear' },
-  { level: 5, color: 'dark-red', label: 'Angry', icon: feelingAngry, feeling: 'angry' },
+  { level: 3, color: 'orange', label: 'Pessimisme', icon: feelingPessimism, feeling: 'pessimism' },
+  { level: 4, color: 'red', label: 'Peur', icon: feelingFear, feeling: 'fear' },
+  { level: 5, color: 'dark-red', label: 'En colère', icon: feelingAngry, feeling: 'angry' },
 ];
 
 const colorClasses: Record<string, string> = {
@@ -51,7 +51,7 @@ export function EmotionScaleComponent({ onSelect, selectedEmotion }: EmotionScal
     <div className="emotion-scale">
       <div className="question-header">
         <img src={howDoYouFeelIcon} alt="How do you feel" className="question-icon" />
-        <h3 className="text-lg font-semibold mb-4">How do you feel?</h3>
+        <h3 className="text-lg font-semibold mb-4">Comment te sens-tu ?</h3>
       </div>
       <div className="emotion-buttons">
         {emotionLevels.map((emotion) => (
@@ -74,7 +74,7 @@ export function EmotionScaleComponent({ onSelect, selectedEmotion }: EmotionScal
       </div>
       {selected > 0 && (
         <p className="mt-4 text-center text-sm text-muted-foreground">
-          Selected level: {emotionLevels[selected - 1].label}
+          Niveau sélectionné : {emotionLevels[selected - 1].label}
         </p>
       )}
     </div>

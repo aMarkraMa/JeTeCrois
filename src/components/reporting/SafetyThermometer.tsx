@@ -12,11 +12,11 @@ interface SafetyThermometerProps {
 }
 
 const safetyLevels = [
-  { level: 1, feeling: 'very_safe', label: 'Very Safe', color: '#22c55e' },
-  { level: 2, feeling: 'safe', label: 'Safe', color: '#84cc16' },
-  { level: 3, feeling: 'neutral', label: 'Neutral', color: '#eab308' },
-  { level: 4, feeling: 'unsafe', label: 'Unsafe', color: '#f97316' },
-  { level: 5, feeling: 'very_unsafe', label: 'Very Unsafe', color: '#ef4444' },
+  { level: 1, feeling: 'very_safe', label: 'Très en sécurité', color: '#22c55e' },
+  { level: 2, feeling: 'safe', label: 'En sécurité', color: '#84cc16' },
+  { level: 3, feeling: 'neutral', label: 'Neutre', color: '#eab308' },
+  { level: 4, feeling: 'unsafe', label: 'Pas en sécurité', color: '#f97316' },
+  { level: 5, feeling: 'very_unsafe', label: 'Très dangereux', color: '#ef4444' },
 ];
 
 export function SafetyThermometerComponent({ onSelect, selectedSafety }: SafetyThermometerProps) {
@@ -37,7 +37,7 @@ export function SafetyThermometerComponent({ onSelect, selectedSafety }: SafetyT
     <div className="safety-thermometer">
       <div className="question-header">
         <div className="question-icon-placeholder">🛡️</div>
-        <h3 className="text-lg font-semibold mb-6 text-center">Do you feel safe at school?</h3>
+        <h3 className="text-lg font-semibold mb-6 text-center">Te sens-tu en sécurité à l'école ?</h3>
       </div>
       
       <div className="thermometer-container-horizontal">
@@ -67,7 +67,7 @@ export function SafetyThermometerComponent({ onSelect, selectedSafety }: SafetyT
 
       {selected > 0 && (
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          Safety level: {safetyLevels[selected - 1].label}
+          Niveau de sécurité : {safetyLevels[selected - 1].label}
         </p>
       )}
     </div>

@@ -266,7 +266,7 @@ export function BodyMap({ onSelect, selectedPoints = [] }: BodyMapProps) {
       </div>
       {selectedRegions.size > 0 && (
         <div className="mt-4">
-          <p className="text-sm text-muted-foreground mb-2">Zones sélectionnées:</p>
+          <p className="text-sm text-muted-foreground mb-2">Zones sélectionnées :</p>
           <div className="flex flex-wrap gap-2">
             {Array.from(selectedRegions).map((rid) => {
               const r = regions.find((x) => x.id === rid)!;
