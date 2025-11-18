@@ -76,7 +76,7 @@ export function AboutUs() {
                 <div className="step-number">1</div>
                 <div className="step-content">
                   <h3>Signalement</h3>
-                  <img src="public/screenshot_home.png"  alt="Signalement" className="workflow-icon" />
+                  <img src="/screenshot_home.png"  alt="Signalement" className="workflow-icon" />
                   <p>L'élève veut faire un signalement.</p>
 
                 </div>
@@ -87,7 +87,7 @@ export function AboutUs() {
                 <div className="step-number">2</div>
                 <div className="step-content">
                   <h3>Questions visuelles</h3>
-                  <img src="public/screenshot_type.png"  alt="Signalement" className="workflow-icon" />
+                  <img src="/screenshot_type.png"  alt="Signalement" className="workflow-icon" />
 
                   <p>L'application pose des questions visuelles (librairie AAC).</p>
                 </div>
@@ -98,7 +98,7 @@ export function AboutUs() {
                 <div className="step-number">3</div>
                 <div className="step-content">
                   <h3>Questions visuelles</h3>
-                  <img src="public/screenshot_type.png"  alt="Signalement" className="workflow-icon" />
+                  <img src="/screenshot_type.png"  alt="Signalement" className="workflow-icon" />
 
                   <p>L'application pose des questions visuelles (librairie AAC).</p>
                 </div>
@@ -109,7 +109,7 @@ export function AboutUs() {
                 <div className="step-number">4</div>
                 <div className="step-content">
                   <h3>Précisions</h3>
-                  <img src="public/screenshot_bodypart.png"  alt="Signalement" className="workflow-icon" />
+                  <img src="/screenshot_bodypart.png"  alt="Signalement" className="workflow-icon" />
 
                   <p>L'élève peut préciser par le visuel.</p>
                 </div>
@@ -121,7 +121,7 @@ export function AboutUs() {
                 <div className="step-number">5</div>
                 <div className="step-content">
                   <h3>Confirmation</h3>
-                  <img src="public/screenshot_report_review.png"  alt="Signalement" className="workflow-icon" />
+                  <img src="/screenshot_report_review.png"  alt="Signalement" className="workflow-icon" />
 
                   <p>L'élève confirme le signalement.</p>
                 </div>
@@ -132,7 +132,7 @@ export function AboutUs() {
                 <div className="step-number">6</div>
                 <div className="step-content">
                   <h3>Envoi</h3>
-                  <img src="public/screenshot_teacher_dashboard.png"  alt="Signalement" className="workflow-icon" />
+                  <img src="/screenshot_teacher_dashboard.png"  alt="Signalement" className="workflow-icon" />
 
                   <p>Le signalement est envoyé au responsable d'établissement.</p>
                 </div>
