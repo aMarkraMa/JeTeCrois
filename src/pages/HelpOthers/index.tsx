@@ -9,10 +9,15 @@ import { BodyMap } from '@/components/reporting/BodyMap';
 import { EmotionScaleComponent } from '@/components/reporting/EmotionScale';
 import { SafetyThermometerComponent } from '@/components/reporting/SafetyThermometer';
 import { Button } from '@/components/ui/button';
+import { ArrowLeft, ArrowRight, Send, Loader2 } from 'lucide-react';
 // Question icons
 import whereIcon from '@/assets/icons/questions/where.png';
 import howOftenIcon from '@/assets/icons/questions/How_offen.png';
 import whichBodyPartIcon from '@/assets/icons/questions/Which_body_part.png';
+// Frequency icons
+import freqOnceIcon from '@/assets/icons/Frequence/Freq_once.png';
+import freqSometimesIcon from '@/assets/icons/Frequence/Freq_sometimes.png';
+import freqFrequentlyIcon from '@/assets/icons/Frequence/Freq_frequently.png';
 // Category type icons
 import attackIcon from '@/assets/icons/types/attack.png';
 import mockIcon from '@/assets/icons/types/mock.png';
@@ -30,10 +35,9 @@ import {
 import './HelpOthers.css';
 
 const frequencyOptions = [
-  { value: 'once', label: 'Une fois' },
-  { value: 'sometimes', label: 'Parfois' },
-  { value: 'often', label: 'Souvent' },
-  { value: 'always', label: 'Toujours' },
+  { value: 'once', label: 'Once', icon: freqOnceIcon },
+  { value: 'sometimes', label: 'Sometimes', icon: freqSometimesIcon },
+  { value: 'often', label: 'Often', icon: freqFrequentlyIcon },
 ];
 
 // Category configuration for step-by-step symbol selection
@@ -343,8 +347,10 @@ export function HelpOthers() {
                   key={opt.value}
                   onClick={() => setFrequency({ value: opt.value })}
                   className={`frequency-btn ${frequency?.value === opt.value ? 'selected' : ''}`}
+                  aria-label={opt.label}
                 >
-                  {opt.label}
+                  <img src={opt.icon} alt={opt.label} className="frequency-icon" />
+                  <span className="frequency-label">{opt.label}</span>
                 </button>
               ))}
             </div>
@@ -380,23 +386,30 @@ export function HelpOthers() {
 
         {step === 1 && (
           <div className="form-actions">
-            <Button onClick={() => setStep(step + 1)} disabled={!canProceed()} className="next-btn">
-              Suivant
+            <Button onClick={() => setStep(step + 1)} disabled={!canProceed()} className="next-btn" aria-label="Suivant">
+              <ArrowRight />
             </Button>
           </div>
         )}
         {step > 1 && (
           <div className="form-actions">
-            <Button variant="outline" onClick={() => setStep(step - 1)} className="previous-btn">
-              Précédent
+            <Button variant="outline" onClick={() => setStep(step - 1)} className="previous-btn" aria-label="Précédent">
+              <ArrowLeft />
             </Button>
             {step < 11 ? (
-              <Button onClick={() => setStep(step + 1)} disabled={!canProceed()} className="next-btn">
-                Suivant
+              <Button onClick={() => setStep(step + 1)} disabled={!canProceed()} className="next-btn" aria-label="Suivant">
+                <ArrowRight />
               </Button>
             ) : (
-              <Button onClick={handleSubmit} disabled={!canProceed() || isSubmitting} className="next-btn">
-                {isSubmitting ? 'Envoi...' : 'Envoyer le signalement'}
+              <Button onClick={handleSubmit} disabled={!canProceed() || isSubmitting} className="next-btn" aria-label={isSubmitting ? 'Envoi en cours...' : 'Envoyer le rapport'}>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="spinner-icon" />
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  <Send />
+                )}
               </Button>
             )}
           </div>

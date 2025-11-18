@@ -107,7 +107,7 @@ export function Login() {
     } else {
       // 验证学生手势
       if (!studentId.trim()) {
-        setError('Veuillez entrer votre ID étudiant');
+        setError('Veuillez entrer votre email ou téléphone');
         setIsSubmitting(false);
         return;
       }
@@ -118,7 +118,7 @@ export function Login() {
       }
       isValid = verifyStudentPattern(studentId.trim(), patternData);
       if (!isValid) {
-        setError('ID étudiant ou motif incorrect. Veuillez vérifier vos informations.');
+        setError('Email/téléphone ou motif incorrect. Veuillez vérifier vos informations.');
         setIsSubmitting(false);
         // 重置手势
         patternLockRef.current?.resetPattern();
@@ -292,7 +292,7 @@ export function Login() {
           {role === 'student' && (
             <div className="form-group">
               <label htmlFor="student-id-input" className="form-label">
-                ID Étudiant <span className="required" aria-label="requis">*</span>
+                Email/Phone <span className="required" aria-label="requis">*</span>
               </label>
               <input
                 id="student-id-input"
@@ -303,7 +303,7 @@ export function Login() {
                   setError('');
                 }}
                 className="form-input"
-                placeholder="Entrez votre ID étudiant"
+                placeholder="Entrez votre email ou téléphone"
                 required
                 aria-required="true"
                 aria-invalid={error ? 'true' : 'false'}
@@ -311,7 +311,7 @@ export function Login() {
                 autoComplete="username"
               />
               <span id="student-id-help" className="form-help">
-                L'ID que vous avez utilisé lors de l'inscription
+                L'email ou téléphone que vous avez utilisé lors de l'inscription
               </span>
             </div>
           )}

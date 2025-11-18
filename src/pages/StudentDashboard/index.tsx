@@ -9,11 +9,16 @@ import { BodyMap } from '@/components/reporting/BodyMap';
 import { EmotionScaleComponent } from '@/components/reporting/EmotionScale';
 import { SafetyThermometerComponent } from '@/components/reporting/SafetyThermometer';
 import { Button } from '@/components/ui/button';
+import { ArrowLeft, ArrowRight, Send, Loader2 } from 'lucide-react';
 // Question icons
 import howAreYouIcon from '@/assets/icons/questions/How_u_feel.png';
 import whereIcon from '@/assets/icons/questions/where.png';
 import howOftenIcon from '@/assets/icons/questions/How_offen.png';
 import whichBodyPartIcon from '@/assets/icons/questions/Which_body_part.png';
+// Frequency icons
+import freqOnceIcon from '@/assets/icons/Frequence/Freq_once.png';
+import freqSometimesIcon from '@/assets/icons/Frequence/Freq_sometimes.png';
+import freqFrequentlyIcon from '@/assets/icons/Frequence/Freq_frequently.png';
 // Category type icons
 import attackIcon from '@/assets/icons/types/attack.png';
 import mockIcon from '@/assets/icons/types/mock.png';
@@ -31,10 +36,9 @@ import {
 import './StudentDashboard.css';
 
 const frequencyOptions = [
-  { value: 'once', label: 'Une fois' },
-  { value: 'sometimes', label: 'Parfois' },
-  { value: 'often', label: 'Souvent' },
-  { value: 'always', label: 'Toujours' },
+  { value: 'once', label: 'Once', icon: freqOnceIcon },
+  { value: 'sometimes', label: 'Sometimes', icon: freqSometimesIcon },
+  { value: 'often', label: 'Often', icon: freqFrequentlyIcon },
 ];
 
 // Category configuration for step-by-step symbol selection
@@ -545,64 +549,18 @@ export function StudentDashboard() {
               <img src={howOftenIcon} alt="How often" className="question-icon" />
               <h3 id="frequency-question">À quelle fréquence cela se produit-il ?</h3>
             </div>
-            <div className="frequency-slider">
-              <input
-                type="range"
-                min={0}
-                max={3}
-                step={1}
-                value={
-                  frequency?.value === 'always'
-                    ? 3
-                    : frequency?.value === 'often'
-                    ? 2
-                    : frequency?.value === 'sometimes'
-                    ? 1
-                    : 0
-                }
-                onChange={(e) => {
-                  const idx = Number(e.target.value);
-                  const val = idx === 3 ? 'always' : idx === 2 ? 'often' : idx === 1 ? 'sometimes' : 'once';
-                  setFrequency({ value: val });
-                }}
-                className={`frequency-slider-input ${
-                  frequency?.value === 'always'
-                    ? 'freq-3'
-                    : frequency?.value === 'often'
-                    ? 'freq-2'
-                    : frequency?.value === 'sometimes'
-                    ? 'freq-1'
-                    : 'freq-0'
-                }`}
-                aria-label="Frequency"
-                aria-labelledby="frequency-question"
-                aria-valuemin={0}
-                aria-valuemax={3}
-                aria-valuenow={
-                  frequency?.value === 'always'
-                    ? 3
-                    : frequency?.value === 'often'
-                    ? 2
-                    : frequency?.value === 'sometimes'
-                    ? 1
-                    : 0
-                }
-                aria-valuetext={
-                  frequency?.value === 'always'
-                    ? 'Always'
-                    : frequency?.value === 'often'
-                    ? 'Often'
-                    : frequency?.value === 'sometimes'
-                    ? 'Sometimes'
-                    : 'Once'
-                }
-              />
-              <div className="frequency-slider-labels">
-                <span className={`frequency-slider-label ${frequency?.value === 'once' ? 'active' : ''}`}>Une fois</span>
-                <span className={`frequency-slider-label ${frequency?.value === 'sometimes' ? 'active' : ''}`}>Parfois</span>
-                <span className={`frequency-slider-label ${frequency?.value === 'often' ? 'active' : ''}`}>Souvent</span>
-                <span className={`frequency-slider-label ${frequency?.value === 'always' ? 'active' : ''}`}>Toujours</span>
-              </div>
+            <div className="frequency-options">
+              {frequencyOptions.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => setFrequency({ value: opt.value })}
+                  className={`frequency-btn ${frequency?.value === opt.value ? 'selected' : ''}`}
+                  aria-label={opt.label}
+                >
+                  <img src={opt.icon} alt={opt.label} className="frequency-icon" />
+                  <span className="frequency-label">{opt.label}</span>
+                </button>
+              ))}
             </div>
           </div>
         )}
@@ -620,16 +578,23 @@ export function StudentDashboard() {
 
         {isEverythingFine === false && step > 1 && (
           <div className="form-actions">
-            <Button variant="outline" onClick={handlePrev} className="previous-btn">
-              Précédent
+            <Button variant="outline" onClick={handlePrev} className="previous-btn" aria-label="Précédent">
+              <ArrowLeft />
             </Button>
             {currentPos < visibleSteps.length - 1 ? (
-              <Button onClick={handleNext} disabled={!canProceed()} className="next-btn">
-                Suivant
+              <Button onClick={handleNext} disabled={!canProceed()} className="next-btn" aria-label="Suivant">
+                <ArrowRight />
               </Button>
             ) : (
-              <Button onClick={handleSubmit} disabled={!canProceed() || isSubmitting} className="next-btn">
-                {isSubmitting ? 'Envoi...' : 'Envoyer le signalement'}
+              <Button onClick={handleSubmit} disabled={!canProceed() || isSubmitting} className="next-btn" aria-label={isSubmitting ? 'Envoi en cours...' : 'Envoyer le rapport'}>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="spinner-icon" />
+                    <span>Sending...</span>
+                  </>
+                ) : (
+                  <Send />
+                )}
               </Button>
             )}
           </div>

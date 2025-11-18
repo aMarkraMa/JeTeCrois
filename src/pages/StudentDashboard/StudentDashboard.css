@@ -436,22 +436,24 @@
 /* Frequency Options */
 .frequency-options {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   width: 100%;
   flex-shrink: 0;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 @media (min-width: 1024px) {
   .frequency-options {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
   }
 }
 
 .frequency-btn {
-  padding: 20px 16px;
-  border: none;
+  padding: 24px 16px;
+  border: 3px solid #7dc4e4;
   border-radius: 20px;
   background: #FFFFFF;
   cursor: pointer;
@@ -459,10 +461,34 @@
   font-size: 18px;
   font-weight: 700;
   color: #2596be;
-  box-shadow: var(--shadow-medium);
-  font-family: 'Varela Round', 'Chalkboard SE', 'Marker Felt', cursive, sans-serif;
-  min-height: 60px;
+  box-shadow: 0 3px 0 0 #7dc4e4, 0 6px 12px rgba(125, 196, 228, 0.2);
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive, sans-serif;
+  min-height: 140px;
   position: relative;
+  border-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2,2 Q25,1 50,2 T98,2 Q99,25 98,50 T98,98 Q75,99 50,98 T2,98 Q1,75 2,50 T2,2' fill='none' stroke='%237dc4e4' stroke-width='3'/%3E%3C/svg%3E") 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.frequency-icon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.frequency-btn:hover .frequency-icon {
+  transform: scale(1.1);
+}
+
+.frequency-label {
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
 }
 
 .frequency-btn:hover {
@@ -476,6 +502,10 @@
   color: white;
   box-shadow: var(--shadow-strong);
   transform: scale(1.05);
+}
+
+.frequency-btn.selected .frequency-icon {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2)) brightness(1.1);
 }
 
 /* Frequency slider */
@@ -687,10 +717,21 @@
   color: #4da8d1;
 }
 
+/* 箭头图标样式 - 更大更粗 */
+.previous-btn svg {
+  width: 32px !important;
+  height: 32px !important;
+  stroke-width: 4px !important;
+}
+
 .previous-btn:hover {
   transform: translateY(-3px);
   background: #f0f8fb !important;
-  box-shadow: var(--shadow-hover) !important;
+  box-shadow: 0 4px 0 0 #4da8d1, 0 8px 16px rgba(77, 168, 209, 0.3) !important;
+}
+
+.previous-btn:hover svg {
+  stroke-width: 5px !important;
 }
 
 .next-btn:not([disabled]) {
@@ -708,6 +749,20 @@
   display: none !important;
 }
 
+/* 箭头图标样式 - 更大更粗 */
+.next-btn:not([disabled]) svg {
+  width: 36px !important;
+  height: 36px !important;
+  stroke-width: 5px !important;
+}
+
+/* Submit 按钮的 Send 图标样式 - 更大更粗 */
+.next-btn:not([disabled]) svg[data-lucide="send"] {
+  width: 40px !important;
+  height: 40px !important;
+  stroke-width: 6px !important;
+}
+
 .next-btn:not([disabled]):hover {
   transform: none; /* 取消位移 */
   box-shadow: var(--shadow-strong) !important; /* 维持默认阴影 */
@@ -715,6 +770,17 @@
 
 .next-btn:not([disabled]):hover::before {
   transform: none; /* 保持箭头不缩放 */
+}
+
+.next-btn:not([disabled]):hover svg {
+  stroke-width: 6px !important;
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}
+
+.next-btn:not([disabled]):hover svg[data-lucide="send"] {
+  stroke-width: 7px !important;
+  transform: scale(1.15);
 }
 
 /* Success Message */

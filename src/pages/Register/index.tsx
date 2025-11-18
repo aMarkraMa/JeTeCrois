@@ -54,7 +54,7 @@ export function Register() {
     }
 
     if (!studentId.trim()) {
-      setError('Veuillez entrer votre ID étudiant');
+      setError('Veuillez entrer votre email ou téléphone');
       return;
     }
 
@@ -65,7 +65,7 @@ export function Register() {
 
     // 检查学生ID是否已注册
     if (isStudentRegistered(studentId.trim())) {
-      setError('Cet ID étudiant est déjà enregistré. Veuillez vous connecter.');
+      setError('Cet email/téléphone est déjà enregistré. Veuillez vous connecter.');
       return;
     }
 
@@ -272,7 +272,7 @@ export function Register() {
 
               <div className="form-group">
                 <label htmlFor="student-id-input" className="form-label">
-                  ID Étudiant <span className="required" aria-label="requis">*</span>
+                  Email/Phone <span className="required" aria-label="requis">*</span>
                 </label>
                 <input
                   id="student-id-input"
@@ -283,12 +283,12 @@ export function Register() {
                     setError('');
                   }}
                   className="form-input"
-                  placeholder="Entrez votre ID étudiant"
+                  placeholder="Entrez votre email ou téléphone"
                   required
                   aria-required="true"
                 />
                 <span className="form-help">
-                  Cet ID sera utilisé pour vous identifier
+                  Votre email ou numéro de téléphone sera utilisé pour vous identifier
                 </span>
               </div>
 

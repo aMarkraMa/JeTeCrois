@@ -4,6 +4,8 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import type { SafetyThermometer } from '@/lib/api';
+import safeIcon from '@/assets/icons/safety/safe.png';
+import unsafeIcon from '@/assets/icons/safety/unsafe.png';
 import './SafetyThermometer.css';
 
 interface SafetyThermometerProps {
@@ -11,12 +13,9 @@ interface SafetyThermometerProps {
   selectedSafety?: SafetyThermometer;
 }
 
-const safetyLevels = [
-  { level: 1, feeling: 'very_safe', label: 'Très en sécurité', color: '#22c55e' },
-  { level: 2, feeling: 'safe', label: 'En sécurité', color: '#84cc16' },
-  { level: 3, feeling: 'neutral', label: 'Neutre', color: '#eab308' },
-  { level: 4, feeling: 'unsafe', label: 'Pas en sécurité', color: '#f97316' },
-  { level: 5, feeling: 'very_unsafe', label: 'Très dangereux', color: '#ef4444' },
+const safetyOptions = [
+  { level: 1, feeling: 'safe', label: 'Safe', color: '#22c55e', icon: safeIcon },
+  { level: 2, feeling: 'unsafe', label: 'Unsafe', color: '#ef4444', icon: unsafeIcon },
 ];
 
 export function SafetyThermometerComponent({ onSelect, selectedSafety }: SafetyThermometerProps) {
@@ -41,7 +40,7 @@ export function SafetyThermometerComponent({ onSelect, selectedSafety }: SafetyT
       </div>
       
       <div className="thermometer-container-horizontal">
-        {safetyLevels.map((safety) => {
+        {safetyOptions.map((safety) => {
           const isActive = selected === safety.level;
           
           return (
@@ -58,7 +57,11 @@ export function SafetyThermometerComponent({ onSelect, selectedSafety }: SafetyT
                 color: isActive ? 'white' : '#1f2937',
               }}
             >
-              <div className="thermometer-number">{safety.level}</div>
+              <img 
+                src={safety.icon} 
+                alt={safety.label} 
+                className="safety-icon"
+              />
               <div className="thermometer-label-horizontal">{safety.label}</div>
             </button>
           );
@@ -67,7 +70,7 @@ export function SafetyThermometerComponent({ onSelect, selectedSafety }: SafetyT
 
       {selected > 0 && (
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          Niveau de sécurité : {safetyLevels[selected - 1].label}
+          Safety level: {safetyOptions[selected - 1].label}
         </p>
       )}
     </div>
