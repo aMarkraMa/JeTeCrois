@@ -37,9 +37,9 @@ export function AboutUs() {
             </div>
             <div className="hero-text">
               <h1 className="hero-title">Je te crois</h1>
-              <h2 className="hero-subtitle">Signaler le harcèlement pour les élèves en situation de handicap verbal</h2>
-              <Link to="/teacher" className="cta-primary">
-                Essayer
+              <h2 className="hero-subtitle">Signaler le harcèlement par le visuel</h2>
+              <Link to="/student" className="cta-primary">
+                Essayer la démo
               </Link>
             </div>
           </div>
@@ -52,17 +52,33 @@ export function AboutUs() {
             <div className="audience-grid">
               <div className="audience-card">
                 <ArasaacPicto id={37444} align="center" size="50%" alt="Enfant autistique" className="audience-icon" />
-                <h3>Élèves autistiques harcelés</h3>
-                <p>Une interface adaptée pour faciliter l'expression</p>
+                <h3>
+                  <span style={{ fontSize: '4em', color: 'FireBrick', fontWeight: 'bold', lineHeight: 1 }}>
+                    72%
+                  </span>
+                  <br />
+                  des élèves autistiques sont harcelés
+                </h3>  
+                <p> ➔ Une interface adaptée pour faciliter l'expression</p>
               </div>
               <div className="audience-card">
               <ArasaacPicto id={32558} align="center" size="50%" alt="Enfant autistique" className="audience-icon" />
-              <h3>Élèves dyslexiques</h3>
+              <h3>
+                  <span style={{ fontSize: '4em', color: 'DarkOrange', fontWeight: 'bold', lineHeight: 1 }}>
+                    30%
+                  </span>
+                  <br />
+                  de plus de harcèlement parmi les élèves dyslexiques
+                </h3>
                 <p>Communication visuelle pour surmonter les difficultés de lecture</p>
               </div>
               <div className="audience-card">
-              <ArasaacPicto id={8173} align="center" size="50%" alt="Enfant autistique" className="audience-icon" />
-                <h3>Élèves non francophones</h3>
+              <ArasaacPicto id={8173} align="center" size="40%" alt="Enfant autistique" className="audience-icon" />
+              <h3>
+                  <span style={{ fontSize: '4em', color: 'DarkRed', fontWeight: 'bold', lineHeight: 1 }}>
+                    30%
+                  </span>
+                  <br />des élèves non-francophones se sentent discriminés en classe</h3>
                 <p>Pictogrammes universels pour une communication sans barrière linguistique</p>
               </div>
             </div>
@@ -197,7 +213,9 @@ export function AboutUs() {
             </div>
           </section>
         </main>
-
+        <Link to="/student" className="cta-secondary">
+                Essayer la démo
+              </Link>
         {/* Call to Action Footer */}
         <footer className="footer-cta">
           <h2>Prêt à faire la différence ?</h2>
